@@ -59,7 +59,6 @@ version = "0.1.0"
 dependencies = [
  "serde",
  "serde_json",
- "src-db",
  "tauri",
  "tauri-build",
 ]
