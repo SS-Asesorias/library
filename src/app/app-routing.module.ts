@@ -7,11 +7,7 @@ const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   {
     path: 'home',
-    component: HomeComponent,
-    children: [
-      { path: '', redirectTo: 'add-book', pathMatch: 'full' },
-      { path: 'add-book', component: AddBookComponent },
-    ],
+    loadChildren: () => import('./home/home.module').then((m) => m.HomeModule)
   },
 ];
 
