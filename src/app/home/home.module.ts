@@ -9,6 +9,8 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [AddBookComponent, HomeComponent],
@@ -19,6 +21,8 @@ import { FormsModule } from '@angular/forms';
     MatButtonModule,
     MatInputModule,
     FormsModule,
+    MatButtonToggleModule,
+    MatIconModule,
   ],
 })
 export class HomeModule {}

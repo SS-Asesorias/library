@@ -1,38 +1,44 @@
 <mat-card>
   <mat-card-header>
-    <mat-card-title>Register Book</mat-card-title>
-    <mat-card-subtitle>add-book works!</mat-card-subtitle>
+    <mat-card-title>Add Book</mat-card-title>
   </mat-card-header>
 
   <mat-card-content>
     <mat-form-field>
       <mat-label>Title</mat-label>
-      <input (ngModelChange)="logValue($event.valueOf())" [(ngModel)]="title" matInput/>
+      <input [(ngModel)]="title" matInput/>
     </mat-form-field>
 
-    <br/>
-    <button (click)="addAuthor()" mat-button>Add Author</button>
-    <hr/>
 
+    <br>
     <mat-form-field>
       <mat-label>Editorial</mat-label>
-      <input (ngModelChange)="logValue($event.valueOf())" [(ngModel)]="editorial" matInput/>
+      <input [(ngModel)]="editorial" matInput/>
     </mat-form-field>
-
+    <br>
     <mat-form-field>
       <mat-label>Edition</mat-label>
-      <input (ngModelChange)="logValue($event.valueOf())" [(ngModel)]="edition" matInput/>
+      <input [(ngModel)]="edition" matInput/>
     </mat-form-field>
-
-    <mat-form-field>
-      <!-- maybe could be a set of stars (1 to 5) -->
-      <mat-label>Condition</mat-label>
-      <input (ngModelChange)="logValue($event.valueOf())" [(ngModel)]="condition" matInput>
-    </mat-form-field>
+    <br>
 
     <mat-form-field>
       <mat-label>Position</mat-label>
-      <input (ngModelChange)="logValue($event.valueOf())" [(ngModel)]="position" matInput>
+      <input [(ngModel)]="position" matInput>
     </mat-form-field>
+    <br>
+    <mat-label>Condition</mat-label>
+    <mat-button-toggle-group [(ngModel)]="condition">
+      <ng-container *ngFor="let i of [1,2,3,4,5]">
+        <mat-button-toggle value={{i}}>
+          <mat-icon *ngIf="i<=condition" class="star">star</mat-icon>
+          <mat-icon *ngIf="i>condition" class="star">star_border</mat-icon>
+        </mat-button-toggle>
+      </ng-container>
+    </mat-button-toggle-group>
+
+
+    <br/><br/>
+    <button (click)="addAuthor()" mat-button>Add Author</button>
   </mat-card-content>
 </mat-card>

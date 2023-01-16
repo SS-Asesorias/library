@@ -10,7 +10,7 @@ export class AddBookComponent {
   @Input() editorial: string = '';
   @Input() edition: string = '';
 
-  @Input() condition: number = 0;
+  @Input() condition: number = 1;
   @Input() position: string = '';
 
   logValue(value: string) {
@@ -19,5 +19,9 @@ export class AddBookComponent {
 
   addAuthor() {
     throw Error('Not implemented');
+  }
+
+  setCondition(value: number) {
+    this.condition = value;
   }
 }
