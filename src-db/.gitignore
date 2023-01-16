@@ -1,2 +1,4 @@
-.env
-library.sqlite
+/target/
+
+./.env
+./library.sqlite
