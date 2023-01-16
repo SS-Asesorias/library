@@ -2,12 +2,12 @@ use crate::models::authors::{Author, _NewAuthor};
 use crate::models::authors_books::AuthorsBooks;
 use crate::models::books::{Book, NewBook, _NewBook};
 use diesel::sqlite::SqliteConnection;
-use diesel::{CombineDsl, Connection, RunQueryDsl};
+use diesel::{Connection, RunQueryDsl};
 use dotenvy::dotenv;
 use std::{env, usize};
 
 pub mod models;
-mod schema;
+pub mod schema;
 
 pub fn establish_connection() -> SqliteConnection {
     dotenv().ok();

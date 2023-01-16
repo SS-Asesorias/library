@@ -1,4 +1,3 @@
-use std::collections::LinkedList;
 use diesel::prelude::*;
 use src_db::models::books::{Book, NewBook};
 use src_db::*;
