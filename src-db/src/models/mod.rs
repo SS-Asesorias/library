@@ -1,3 +1,3 @@
 pub mod authors;
 pub mod books;
-pub mod authors_books;
+pub(crate) mod authors_books;
