@@ -4,6 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { HomeModule } from './home/home.module';
 import { MatCardModule } from "@angular/material/card";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
@@ -19,6 +20,7 @@ import { AuthorFieldsComponent } from './author-fields/author-fields.component';
     BookFieldsComponent,
     AuthorFieldsComponent
   ],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -28,8 +30,10 @@ import { AuthorFieldsComponent } from './author-fields/author-fields.component';
     MatCardModule,
     MatTableModule,
     MatButtonModule
+    BrowserAnimationsModule,
+    HomeModule,
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
