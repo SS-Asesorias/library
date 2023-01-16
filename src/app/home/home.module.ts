@@ -7,9 +7,10 @@ import { HomeRoutingModule } from './home-routing.module';
 // Angular Material components
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
+import {MatInputModule} from "@angular/material/input";
 
 @NgModule({
   declarations: [AddBookComponent, HomeComponent],
-  imports: [CommonModule, HomeRoutingModule, MatCardModule, MatButtonModule],
+    imports: [CommonModule, HomeRoutingModule, MatCardModule, MatButtonModule, MatInputModule],
 })
 export class HomeModule {}
