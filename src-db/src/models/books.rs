@@ -1,10 +1,10 @@
-use std::collections::LinkedList;
 use diesel::prelude::*;
+use serde::{Serialize, Deserialize};
 use crate::models::authors::NewAuthor;
 use crate::schema::books;
 
 #[derive(Queryable)]
-pub(crate) struct Book {
+pub struct Book {
     pub id: i32,
     pub title: Option<String>,
     pub editorial: Option<String>,
@@ -13,6 +13,7 @@ pub(crate) struct Book {
     pub position: String,
 }
 
+#[derive(Serialize, Deserialize)]
 pub struct NewBook {
     pub title: Option<String>,
     pub editorial: Option<String>,
