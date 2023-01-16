@@ -26,16 +26,19 @@
       <mat-label>Position</mat-label>
       <input [(ngModel)]="position" matInput>
     </mat-form-field>
+
     <br>
-    <mat-label>Condition</mat-label>
-    <mat-button-toggle-group [(ngModel)]="condition">
-      <ng-container *ngFor="let i of [1,2,3,4,5]">
-        <mat-button-toggle value={{i}}>
-          <mat-icon *ngIf="i<=condition" class="star">star</mat-icon>
-          <mat-icon *ngIf="i>condition" class="star">star_border</mat-icon>
-        </mat-button-toggle>
-      </ng-container>
-    </mat-button-toggle-group>
+    <div class="condition-container">
+      <mat-label class="condition-container-label">Condition</mat-label>
+      <mat-button-toggle-group [(ngModel)]="condition" class="condition-container-selector">
+        <ng-container *ngFor="let i of [1,2,3,4,5]">
+          <mat-button-toggle value={{i}}>
+            <mat-icon *ngIf="i<=condition" class="star">star</mat-icon>
+            <mat-icon *ngIf="i>condition" class="star">star_border</mat-icon>
+          </mat-button-toggle>
+        </ng-container>
+      </mat-button-toggle-group>
+    </div>
 
 
     <br/><br/>
