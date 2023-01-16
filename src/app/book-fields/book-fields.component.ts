@@ -8,7 +8,19 @@ import { Component } from '@angular/core';
 
 
 export class BookFieldsComponent {
+  authors: any[] = [
+    {
+      name:"John",
+      lname:"Doe"
+    },
+    {
+      name:"Mary",
+      lname:"Sue"
+    },
+  ];
+
   addAuthor() : any {
+    alert("method not ")
     throw new Error("method not implemented");
   }
 }
