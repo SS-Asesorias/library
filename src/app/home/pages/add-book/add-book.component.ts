@@ -17,13 +17,13 @@ export class AddBookComponent {
 
   constructor(private bookService: BooksService) {}
 
-  addAuthor() {
+  saveBook() {
     const book: Book = {
       id: undefined,
       title: this.title,
       editorial: this.editorial,
       edition: this.edition,
-      condition: this.condition,
+      condition: Number(this.condition),
       position: this.position,
     };
     const authors: Author[] = [];
