@@ -1,4 +1,7 @@
 import { Component, Input } from '@angular/core';
+import { BooksService } from 'src/app/core/services/books.service';
+import { Book } from '../../../core/models/Book';
+import { Author } from '../../../core/models/Author';
 
 @Component({
   selector: 'app-add-book',
@@ -6,22 +9,25 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./add-book.component.scss'],
 })
 export class AddBookComponent {
-  @Input() title: string = '';
-  @Input() editorial: string = '';
-  @Input() edition: string = '';
+  @Input() title = '';
+  @Input() editorial = '';
+  @Input() edition = '';
+  @Input() condition = 1;
+  @Input() position = '';
 
-  @Input() condition: number = 1;
-  @Input() position: string = '';
-
-  logValue(value: string) {
-    console.log(value);
-  }
+  constructor(private bookService: BooksService) {}
 
   addAuthor() {
-    throw Error('Not implemented');
-  }
+    const book: Book = {
+      id: undefined,
+      title: this.title,
+      editorial: this.editorial,
+      edition: this.edition,
+      condition: this.condition,
+      position: this.position,
+    };
+    const authors: Author[] = [];
 
-  setCondition(value: number) {
-    this.condition = value;
+    this.bookService.registerBook(book, authors);
   }
 }

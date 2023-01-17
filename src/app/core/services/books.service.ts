@@ -7,8 +7,6 @@ import { Author } from '../models/Author';
   providedIn: 'root',
 })
 export class BooksService {
-  constructor() {}
-
   async registerBook(book: Book, authors: Author[]) {
     const newBook = {
       title: book.title,

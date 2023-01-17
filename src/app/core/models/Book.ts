@@ -1,5 +1,5 @@
 export class Book {
-  id: number | undefined;
+  id: number | undefined = undefined;
   title: string | undefined;
   editorial: string | undefined;
   edition: string | undefined;

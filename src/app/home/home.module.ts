@@ -11,6 +11,8 @@ import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatIconModule } from '@angular/material/icon';
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatTableModule } from '@angular/material/table';
 
 @NgModule({
   declarations: [AddBookComponent, HomeComponent],
@@ -23,6 +25,8 @@ import { MatIconModule } from '@angular/material/icon';
     FormsModule,
     MatButtonToggleModule,
     MatIconModule,
+    MatStepperModule,
+    MatTableModule,
   ],
 })
 export class HomeModule {}
