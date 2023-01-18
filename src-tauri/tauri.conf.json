@@ -21,7 +21,9 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "resources": [],
+      "resources": [
+        "./library.sqlite"
+      ],
       "externalBin": [],
       "copyright": "",
       "category": "DeveloperTool",
@@ -48,12 +50,17 @@
       "active": false
     },
     "allowlist": {
-      "all": true
+      "all": true,
+      "fs": {
+        "scope": ["$RESOURCE/*"],
+        "readFile": true,
+        "writeFile": true
+      }
     },
     "windows": [
       {
         "title": "Angular Tauri",
-        "width": 800,
+        "width": 1000,
         "height": 600,
         "resizable": true,
         "fullscreen": false
