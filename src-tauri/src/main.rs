@@ -26,6 +26,7 @@ fn main() {
             if !library_file.exists() {
                 fs::copy(database_path.to_str().unwrap(), library_path)
                     .expect("Failed to create library database");
+                println!("Database initialized");
             }
 
             Ok(())
