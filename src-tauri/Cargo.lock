@@ -2608,6 +2608,8 @@ version = "0.1.0"
 dependencies = [
  "diesel",
  "dotenvy",
+ "serde",
+ "serde_json",
 ]
 
 [[package]]
