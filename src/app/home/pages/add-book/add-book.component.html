@@ -52,65 +52,44 @@
                 </div>
             </div>
 
-            <!--select author from dropdown-->
-            <!--if user selects none, a prompt will ask them to write the name of the author-->
-            <!--insert new author-->
-
             <div class="row justify-content-between align">
 
                 <mat-form-field class="col-5">
                     <mat-label>Name</mat-label>
-                    <input [(ngModel)]="author_name" matInput>
+                    <input (keyup)="applyFilter($event)" [(ngModel)]="author_name" matInput>
                 </mat-form-field>
 
                 <mat-form-field class="col-5">
                     <mat-label>Last Name</mat-label>
-                    <input [(ngModel)]="author_last_name" matInput>
+                    <input (keyup)="applyFilter($event)" [(ngModel)]="author_last_name" matInput>
                 </mat-form-field>
 
-                <button class="col-2 m-0" mat-stroked-button type="submit"> Add Author</button>
+                <button (click)="saveAuthor()" class="col-2 m-0" mat-stroked-button type="submit"> Add Author</button>
             </div>
 
-            <mat-table [dataSource]="author_options">
-                <ng-container matColumnDef="id">
-                    <mat-header-cell *matHeaderCellDef> ID</mat-header-cell>
-                    <mat-cell *matCellDef="let author"> {{author.id}} </mat-cell>
-                </ng-container>
+            <mat-table [dataSource]="dataSource">
                 <ng-container matColumnDef="name">
                     <mat-header-cell *matHeaderCellDef> Name</mat-header-cell>
                     <mat-cell *matCellDef="let author"> {{author.name}} </mat-cell>
                 </ng-container>
                 <ng-container matColumnDef="lname">
                     <mat-header-cell *matHeaderCellDef> Last Name</mat-header-cell>
-                    <mat-cell *matCellDef="let author"> {{author.last_name}} </mat-cell>
+                    <mat-cell *matCellDef="let author"> {{author.lname}} </mat-cell>
                 </ng-container>
 
-                <ng-container matColumnDef="select">
+                <ng-container matColumnDef="checked">
                     <mat-header-cell *matHeaderCellDef>
                         Selected
                     </mat-header-cell>
                     <mat-cell *matCellDef="let author">
-                        <mat-checkbox (click)="rowClicked(author.id)">
+                        <mat-checkbox (click)="rowClicked(author.id)" [checked]="author.checked">
                         </mat-checkbox>
-                    </mat-cell>
-                </ng-container>
-
-                <ng-container matColumnDef="actions">
-                    <mat-header-cell *matHeaderCellDef>
-                        Actions
-                    </mat-header-cell>
-                    <mat-cell *matCellDef="let author">
-                        <button (click)="author.id" color="primary" mat-stroked-button>
-                            <mat-icon class="m-0">add</mat-icon>
-                        </button>
                     </mat-cell>
                 </ng-container>
 
                 <!---->
                 <mat-header-row *matHeaderRowDef="columnsToDisplay"></mat-header-row>
                 <mat-row *matRowDef="let _; columns: columnsToDisplay"></mat-row>
-
-
             </mat-table>
 
             <hr>
