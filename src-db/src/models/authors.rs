@@ -2,7 +2,7 @@ use diesel::prelude::*;
 use serde::{Serialize, Deserialize};
 use crate::schema::authors;
 
-#[derive(Queryable)]
+#[derive(Queryable, Serialize, Deserialize)]
 pub struct Author {
     pub name: String,
     pub lname: Option<String>,
