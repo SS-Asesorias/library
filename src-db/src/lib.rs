@@ -57,6 +57,12 @@ pub fn register_book(conn: &mut SqliteConnection, book: &NewBook) {
     }
 }
 
+pub fn get_authors(conn: &mut SqliteConnection) -> Vec<Author> {
+    use self::schema::authors::dsl::*;
+
+    authors.load::<Author>(conn).expect("Error loading authors")
+}
+
 fn create_book(conn: &mut SqliteConnection, new_book: &_NewBook) -> Book {
     use crate::schema::books;
 
