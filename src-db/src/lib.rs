@@ -6,6 +6,8 @@ use diesel::{Connection, RunQueryDsl};
 use dotenvy::dotenv;
 use std::usize;
 
+pub extern crate diesel;
+
 pub mod models;
 pub mod schema;
 
