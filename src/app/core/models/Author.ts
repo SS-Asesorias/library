@@ -1,5 +1,5 @@
 export class Author {
-    name: string | undefined;
-    lname: string | undefined;
-    id: number | undefined;
+  name: string | undefined;
+  last_name: string | undefined;
+  id: number | undefined;
 }
