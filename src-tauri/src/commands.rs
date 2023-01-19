@@ -1,6 +1,7 @@
 use src_db::models::authors::Author;
 use src_db::models::books::NewBook;
 use src_db::{establish_connection, get_authors, register_book};
+use src_db::diesel::SqliteConnection;
 use tauri::api::path::app_local_data_dir;
 use tauri::AppHandle;
 
