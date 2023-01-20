@@ -13,6 +13,7 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatIconModule } from '@angular/material/icon';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatTableModule } from '@angular/material/table';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @NgModule({
   declarations: [AddBookComponent, HomeComponent],
@@ -27,6 +28,7 @@ import { MatTableModule } from '@angular/material/table';
     MatIconModule,
     MatStepperModule,
     MatTableModule,
+    MatCheckboxModule,
   ],
 })
 export class HomeModule {}
