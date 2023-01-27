@@ -15,7 +15,7 @@ fn main() {
         .setup(|app| {
             let database_path = app
                 .path_resolver()
-                .resolve_resource("library.sqlite")
+                .resolve_resource("../src-db/library.sqlite")
                 .expect("Failed to resolve resource: library.sqlite");
 
             let app_datapath = app_local_data_dir(&app.config()).unwrap();
