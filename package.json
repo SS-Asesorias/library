@@ -1,10 +1,12 @@
 {
   "name": "library",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "scripts": {
     "ng": "ng",
-    "start": "toolbox run bash -c 'source $HOME/.bashrc && npm run tauri:serve'",
-    "build": "toolbox run bash -c 'source $HOME/.bashrc && npm run tauri:bundle'",
+    "start": "npm run tauri:serve",
+    "build": "npm run tauri:bundle",
+    "linux:start": "toolbox run bash -c 'source $HOME/.bashrc && npm start'",
+    "linux:build": "toolbox run bash -c 'source $HOME/.bashrc && npm run build'",
     "web:serve": "ng serve -o",
     "web:build": "ng build --base-href ./",
     "web:dev": "npm run web:build",

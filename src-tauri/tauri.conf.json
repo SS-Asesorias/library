@@ -1,12 +1,12 @@
 {
   "package": {
     "productName": "library",
-    "version": "1.0.0"
+    "version": "1.0.1"
   },
   "build": {
     "distDir": "../dist",
-    "devPath": "http://localhost:4200",
-    "beforeDevCommand": "npm run web:serve",
+    "devPath": "../dist",
+    "beforeDevCommand": "npm run web:dev",
     "beforeBuildCommand": "npm run web:prod"
   },
   "tauri": {
@@ -52,7 +52,9 @@
     "allowlist": {
       "all": true,
       "fs": {
-        "scope": ["$RESOURCE/*"],
+        "scope": [
+          "$RESOURCE/*"
+        ],
         "readFile": true,
         "writeFile": true
       }
