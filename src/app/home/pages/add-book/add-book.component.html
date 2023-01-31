@@ -1,105 +1,120 @@
 <div class="justify-content-center align-content-center">
-    <mat-card class="m-5 p-2">
+  <mat-card class="m-5 p-2">
+    <mat-card-content>
+      <div class="row">
+        <mat-card-title class="col-12 text-center">Add Book</mat-card-title>
+      </div>
 
-        <mat-card-content>
+      <hr />
+      <div class="row align-items-center">
+        <mat-form-field class="col-12">
+          <mat-label>Title</mat-label>
+          <input [(ngModel)]="title" matInput />
+        </mat-form-field>
+      </div>
+      <div class="row">
+        <mat-form-field class="col-12">
+          <mat-label>Editorial</mat-label>
+          <input [(ngModel)]="editorial" matInput />
+        </mat-form-field>
+      </div>
 
-            <div class="row">
-                <mat-card-title class="col-12 text-center">Add Book</mat-card-title>
-            </div>
+      <div class="row">
+        <mat-form-field class="col-12">
+          <mat-label>Edition</mat-label>
+          <input [(ngModel)]="edition" matInput />
+        </mat-form-field>
+      </div>
 
-            <hr>
-            <div class="row align-items-center">
-                <mat-form-field class="col-12">
-                    <mat-label>Title</mat-label>
-                    <input [(ngModel)]="title" matInput/>
-                </mat-form-field>
+      <div class="row justify-content-between">
+        <mat-form-field class="col-4">
+          <mat-label>Position</mat-label>
+          <input [(ngModel)]="position" matInput />
+        </mat-form-field>
 
+        <div class="col-6">
+          <mat-label class="mw-100" id="condition-label">Condition</mat-label>
 
-            </div>
-            <div class="row">
-                <mat-form-field class="col-12">
-                    <mat-label>Editorial</mat-label>
-                    <input [(ngModel)]="editorial" matInput/>
-                </mat-form-field>
-            </div>
+          <mat-button-toggle-group [(ngModel)]="condition">
+            <ng-container *ngFor="let i of [1, 2, 3, 4, 5]">
+              <mat-button-toggle value="{{ i }}">
+                <mat-icon *ngIf="i <= condition" class="star">star</mat-icon>
+                <mat-icon *ngIf="i > condition" class="star"
+                  >star_border</mat-icon
+                >
+              </mat-button-toggle>
+            </ng-container>
+          </mat-button-toggle-group>
+        </div>
+      </div>
 
-            <div class="row">
-                <mat-form-field class="col-12">
-                    <mat-label>Edition</mat-label>
-                    <input [(ngModel)]="edition" matInput/>
-                </mat-form-field>
-            </div>
+      <div class="row justify-content-between align">
+        <mat-form-field class="col-5">
+          <mat-label>Name</mat-label>
+          <input
+            (keyup)="applyFilter($event)"
+            [(ngModel)]="author_name"
+            matInput
+          />
+        </mat-form-field>
 
-            <div class="row justify-content-between">
-                <mat-form-field class="col-4">
-                    <mat-label>Position</mat-label>
-                    <input [(ngModel)]="position" matInput>
-                </mat-form-field>
+        <mat-form-field class="col-5">
+          <mat-label>Last Name</mat-label>
+          <input
+            (keyup)="applyFilter($event)"
+            [(ngModel)]="author_last_name"
+            matInput
+          />
+        </mat-form-field>
 
+        <button
+          (click)="saveAuthor()"
+          class="col-2 m-0"
+          mat-stroked-button
+          type="submit"
+        >
+          Add Author
+        </button>
+      </div>
 
-                <div class="col-6">
+      <mat-table [dataSource]="dataSource">
+        <ng-container matColumnDef="name">
+          <mat-header-cell *matHeaderCellDef> Name</mat-header-cell>
+          <mat-cell *matCellDef="let author"> {{ author.name }} </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="lname">
+          <mat-header-cell *matHeaderCellDef> Last Name</mat-header-cell>
+          <mat-cell *matCellDef="let author"> {{ author.lname }} </mat-cell>
+        </ng-container>
 
-                    <mat-label class="mw-100" id="condition-label">Condition</mat-label>
+        <ng-container matColumnDef="checked">
+          <mat-header-cell *matHeaderCellDef> Selected </mat-header-cell>
+          <mat-cell *matCellDef="let author">
+            <mat-checkbox
+              (click)="rowClicked(author.id)"
+              [checked]="author.checked"
+            >
+            </mat-checkbox>
+          </mat-cell>
+        </ng-container>
 
-                    <mat-button-toggle-group [(ngModel)]="condition">
-                        <ng-container *ngFor="let i of [1,2,3,4,5]">
-                            <mat-button-toggle value={{i}}>
-                                <mat-icon *ngIf="i<=condition" class="star">star</mat-icon>
-                                <mat-icon *ngIf="i>condition" class="star">star_border</mat-icon>
-                            </mat-button-toggle>
-                        </ng-container>
-                    </mat-button-toggle-group>
-                </div>
-            </div>
+        <!---->
+        <mat-header-row *matHeaderRowDef="columnsToDisplay"></mat-header-row>
+        <mat-row *matRowDef="let _; columns: columnsToDisplay"></mat-row>
+      </mat-table>
 
-            <div class="row justify-content-between align">
-
-                <mat-form-field class="col-5">
-                    <mat-label>Name</mat-label>
-                    <input (keyup)="applyFilter($event)" [(ngModel)]="author_name" matInput>
-                </mat-form-field>
-
-                <mat-form-field class="col-5">
-                    <mat-label>Last Name</mat-label>
-                    <input (keyup)="applyFilter($event)" [(ngModel)]="author_last_name" matInput>
-                </mat-form-field>
-
-                <button (click)="saveAuthor()" class="col-2 m-0" mat-stroked-button type="submit"> Add Author</button>
-            </div>
-
-            <mat-table [dataSource]="dataSource">
-                <ng-container matColumnDef="name">
-                    <mat-header-cell *matHeaderCellDef> Name</mat-header-cell>
-                    <mat-cell *matCellDef="let author"> {{author.name}} </mat-cell>
-                </ng-container>
-                <ng-container matColumnDef="lname">
-                    <mat-header-cell *matHeaderCellDef> Last Name</mat-header-cell>
-                    <mat-cell *matCellDef="let author"> {{author.lname}} </mat-cell>
-                </ng-container>
-
-                <ng-container matColumnDef="checked">
-                    <mat-header-cell *matHeaderCellDef>
-                        Selected
-                    </mat-header-cell>
-                    <mat-cell *matCellDef="let author">
-                        <mat-checkbox (click)="rowClicked(author.id)" [checked]="author.checked">
-                        </mat-checkbox>
-                    </mat-cell>
-                </ng-container>
-
-                <!---->
-                <mat-header-row *matHeaderRowDef="columnsToDisplay"></mat-header-row>
-                <mat-row *matRowDef="let _; columns: columnsToDisplay"></mat-row>
-            </mat-table>
-
-            <hr>
-            <div class="row justify-content-center">
-                <button (click)="saveBook()" class="col-3" color="primary" mat-raised-button type="submit">
-                    Save Book
-                </button>
-            </div>
-
-        </mat-card-content>
-    </mat-card>
+      <hr />
+      <div class="row justify-content-center">
+        <button
+          (click)="saveBook()"
+          class="col-3"
+          color="primary"
+          mat-raised-button
+          type="submit"
+        >
+          Save Book
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
 </div>
-
