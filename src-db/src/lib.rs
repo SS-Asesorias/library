@@ -1,12 +1,14 @@
-use crate::models::authors::{Author, _NewAuthor};
-use crate::models::authors_books::AuthorsBooks;
-use crate::models::books::{Book, NewBook, _NewBook};
-use diesel::sqlite::SqliteConnection;
-use diesel::{Connection, RunQueryDsl};
-use dotenvy::dotenv;
+pub extern crate diesel;
+
 use std::usize;
 
-pub extern crate diesel;
+use diesel::{Connection, RunQueryDsl};
+use diesel::sqlite::SqliteConnection;
+use dotenvy::dotenv;
+
+use crate::models::authors::{_NewAuthor, Author};
+use crate::models::authors_books::AuthorsBooks;
+use crate::models::books::{_NewBook, Book, NewBook};
 
 pub mod models;
 pub mod schema;
@@ -19,19 +21,11 @@ pub fn establish_connection(db_url: &str) -> SqliteConnection {
 
 pub fn register_book(conn: &mut SqliteConnection, book: &NewBook) {
     let insertable_book = _NewBook {
-        title: match &book.title {
-            None => None,
-            Some(val) => Some(val.as_str()),
-        },
-        editorial: match &book.editorial {
-            None => None,
-            Some(val) => Some(val.as_str()),
-        },
-        edition: match &book.edition {
-            None => None,
-            Some(val) => Some(val.as_str()),
-        },
+        title: book.title.as_str(),
+        editorial: book.editorial.as_str(),
+        edition: book.edition.as_str(),
         condition: book.condition,
+        notes: book.notes.as_str(),
         position: book.position.as_str(),
     };
 
@@ -42,10 +36,7 @@ pub fn register_book(conn: &mut SqliteConnection, book: &NewBook) {
             None => {
                 let insertable_author = _NewAuthor {
                     name: author.name.as_str(),
-                    lname: match &author.lname {
-                        None => None,
-                        Some(val) => Some(val.as_str()),
-                    },
+                    lname: author.lname.as_str(),
                 };
 
                 let inserted_author = create_author(conn, &insertable_author);

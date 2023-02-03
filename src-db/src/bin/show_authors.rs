@@ -1,10 +1,13 @@
 use std::env;
+
 use diesel::prelude::*;
-use src_db::models::authors::Author;
+use dotenvy::dotenv;
 use src_db::*;
+use src_db::models::authors::Author;
 
 fn main() {
     use self::schema::authors::dsl::*;
+    dotenv().ok();
 
     let database_url = env::var("DATABASE_URL").expect("DATABASE_URL must be set");
     SqliteConnection::establish(&database_url)
@@ -18,6 +21,6 @@ fn main() {
     for author in results {
         println!("{}", author.id);
         println!("{}", author.name);
-        println!("{}", author.lname.unwrap_or(String::from("Empty")));
+        println!("{}", author.lname);
     }
 }
