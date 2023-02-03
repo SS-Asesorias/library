@@ -3,7 +3,7 @@
 diesel::table! {
     authors (id) {
         name -> Text,
-        lname -> Nullable<Text>,
+        lname -> Text,
         id -> Integer,
     }
 }
@@ -18,11 +18,12 @@ diesel::table! {
 diesel::table! {
     books (id) {
         id -> Integer,
-        title -> Nullable<Text>,
-        editorial -> Nullable<Text>,
-        edition -> Nullable<Text>,
-        condition -> Nullable<Integer>,
+        title -> Text,
+        editorial -> Text,
+        edition -> Text,
+        condition -> Integer,
         position -> Text,
+        notes -> Text,
     }
 }
 
