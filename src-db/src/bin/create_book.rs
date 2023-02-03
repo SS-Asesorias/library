@@ -41,6 +41,6 @@ fn main() {
 
     for book in results {
         println!("{}", book.id);
-        println!("{}", String::from("Nothing"));
+        println!("{}", book.title);
     }
 }
