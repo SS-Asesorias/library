@@ -20,7 +20,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 
 @NgModule({
-  declarations: [AddBookComponent, HomeComponent],
+  declarations: [AddBookComponent, HomeComponent, InventoryComponent],
   imports: [
     CommonModule,
     MatCardModule,
