@@ -14,6 +14,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatTableModule } from '@angular/material/table';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatListModule } from '@angular/material/list';
 
 @NgModule({
   declarations: [AddBookComponent, HomeComponent],
@@ -29,6 +31,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     MatStepperModule,
     MatTableModule,
     MatCheckboxModule,
+    MatSidenavModule,
+    MatListModule,
   ],
 })
 export class HomeModule {}

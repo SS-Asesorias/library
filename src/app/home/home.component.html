@@ -1,3 +1,20 @@
-<div>
-  <router-outlet></router-outlet>
-</div>
+<mat-sidenav-container>
+  <mat-sidenav mode="side" opened fixedInViewport>
+    <mat-list role="list">
+      <mat-list-item role="listitem">
+        <button mat-button routerLink="['add-book']" routerLinkActive="active">
+          Add Book
+        </button>
+      </mat-list-item>
+      <mat-list-item role="listitem">
+        <button mat-button>Inventory</button>
+      </mat-list-item>
+      <mat-list-item role="listitem">
+        <button mat-button>Search</button>
+      </mat-list-item>
+    </mat-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>
