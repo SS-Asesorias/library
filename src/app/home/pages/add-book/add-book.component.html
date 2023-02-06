@@ -107,19 +107,18 @@
         <mat-header-row *matHeaderRowDef="columnsToDisplay"></mat-header-row>
         <mat-row *matRowDef="let _; columns: columnsToDisplay"></mat-row>
       </mat-table>
-
-      <hr />
-      <div class="row justify-content-center">
-        <button
-          (click)="saveBook()"
-          class="col-3"
-          color="primary"
-          mat-raised-button
-          type="submit"
-        >
-          Save Book
-        </button>
-      </div>
     </mat-card-content>
+    <mat-card-actions>
+      <button
+        mat-fab
+        extended
+        color="primary"
+        class="position-fixed bottom-0 end-0 m-3"
+        (click)="saveBook()"
+      >
+        <mat-icon>save</mat-icon>
+        Save Book
+      </button>
+    </mat-card-actions>
   </mat-card>
 </div>
