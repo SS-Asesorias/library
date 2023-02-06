@@ -2,7 +2,11 @@
   <mat-sidenav mode="side" opened fixedInViewport>
     <mat-list role="list">
       <mat-list-item role="listitem">
-        <button mat-button routerLink="['add-book']" routerLinkActive="active">
+        <button
+          mat-button
+          [routerLink]="['add-book']"
+          routerLinkActive="active"
+        >
           Add Book
         </button>
       </mat-list-item>

@@ -1,8 +1,10 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterLink, RouterOutlet } from '@angular/router';
+
 import { AddBookComponent } from './pages/add-book/add-book.component';
 import { HomeComponent } from './home.component';
-import { HomeRoutingModule } from './home-routing.module';
+import { InventoryComponent } from './pages/inventory/inventory.component';
 
 // Angular Material components
 import { MatCardModule } from '@angular/material/card';
@@ -21,7 +23,6 @@ import { MatListModule } from '@angular/material/list';
   declarations: [AddBookComponent, HomeComponent],
   imports: [
     CommonModule,
-    HomeRoutingModule,
     MatCardModule,
     MatButtonModule,
     MatInputModule,
@@ -33,6 +34,8 @@ import { MatListModule } from '@angular/material/list';
     MatCheckboxModule,
     MatSidenavModule,
     MatListModule,
+    RouterOutlet,
+    RouterLink,
   ],
 })
 export class HomeModule {}
