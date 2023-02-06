@@ -78,7 +78,16 @@ export class AddBookComponent implements OnInit {
     const authors = this.author_options
       .filter((e) => e.checked)
       .map((e) => new Author(e.id, e.name, e.lname));
-    this.bookService.registerBook(book, authors).then(r => this.loadAuthors());
+    this.bookService.registerBook(book, authors).then(
+      () => {
+        this.loadAuthors();
+        // TODO: Add alert
+      },
+      (error) => {
+        // TODO: Add alert
+        console.error(error);
+      }
+    );
   }
 
   saveAuthor() {
