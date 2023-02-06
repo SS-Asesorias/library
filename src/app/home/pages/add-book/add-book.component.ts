@@ -17,6 +17,7 @@ export class AddBookComponent implements OnInit {
   @Input() edition = '';
   @Input() condition = 1;
   @Input() position = '';
+  @Input() notes = '';
 
   // @Input() author_id: number | undefined;
   @Input() author_name: string | undefined;
@@ -71,6 +72,7 @@ export class AddBookComponent implements OnInit {
       edition: this.edition,
       condition: Number(this.condition),
       position: this.position,
+      notes: this.notes,
     };
 
     const authors = this.author_options
