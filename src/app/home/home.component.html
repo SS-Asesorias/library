@@ -1,29 +1,18 @@
 <mat-sidenav-container class="h-100">
   <mat-sidenav mode="side" opened fixedInViewport>
     <mat-list role="list">
-      <mat-list-item role="listitem">
-        <button
-          mat-button
-          [routerLink]="['add-book']"
-          routerLinkActive="active"
-        >
-          Add Book
-        </button>
-      </mat-list-item>
-      <mat-divider></mat-divider>
-      <mat-list-item role="listitem">
-        <button
-          mat-button
-          [routerLink]="['inventory']"
-          routerLinkActive="active"
-        >
-          Inventory
-        </button>
-      </mat-list-item>
-      <mat-divider></mat-divider>
-      <mat-list-item role="listitem">
-        <button mat-button>Search</button>
-      </mat-list-item>
+      <ng-container *ngFor="let page of pages">
+        <mat-list-item role="listitem">
+          <button
+            mat-button
+            [routerLink]="[page.link]"
+            routerLinkActive="active"
+          >
+            {{ page.name }}
+          </button>
+        </mat-list-item>
+        <mat-divider></mat-divider>
+      </ng-container>
     </mat-list>
   </mat-sidenav>
   <mat-sidenav-content>
