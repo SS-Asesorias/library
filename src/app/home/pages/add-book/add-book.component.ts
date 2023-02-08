@@ -4,7 +4,16 @@ import { AuthorService } from '../../../core/services/author.service';
 import { Book } from '../../../core/models/Book';
 import { Author } from '../../../core/models/Author';
 import { MatTableDataSource } from '@angular/material/table';
-import { Element } from '../../../shared/models/element';
+import { SelectedAuthor } from '../../../shared/models/selectedAuthor';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import {
+  AbstractControl,
+  FormControl,
+  FormGroup,
+  ValidationErrors,
+  ValidatorFn,
+  Validators,
+} from '@angular/forms';
 
 @Component({
   selector: 'app-add-book',
@@ -12,23 +21,27 @@ import { Element } from '../../../shared/models/element';
   styleUrls: ['./add-book.component.scss'],
 })
 export class AddBookComponent implements OnInit {
-  @Input() title = '';
-  @Input() editorial = '';
-  @Input() edition = '';
-  @Input() condition = 1;
-  @Input() position = '';
+  addBookForm = new FormGroup({
+    title: new FormControl('', [Validators.required]),
+    editorial: new FormControl(''),
+    edition: new FormControl(''),
+    condition: new FormControl('1', [Validators.required]),
+    position: new FormControl('', this.permittedValueValidator()),
+    notes: new FormControl(''),
+    author: new FormGroup({
+      authorName: new FormControl(''),
+      lastName: new FormControl(''),
+    }),
+    authorOptions: new FormControl<SelectedAuthor[]>([], this.authorValidator()),
+  });
 
-  // @Input() author_id: number | undefined;
-  @Input() author_name: string | undefined;
-  @Input() author_last_name: string | undefined;
-
-  author_options: Element[] = [];
   columnsToDisplay = ['name', 'lname', 'checked'];
-  dataSource = new MatTableDataSource<Element>();
+  dataSource = new MatTableDataSource<SelectedAuthor>();
 
   constructor(
     private bookService: BooksService,
-    private authorService: AuthorService
+    private authorService: AuthorService,
+    private _snackBar: MatSnackBar
   ) {
     this.dataSource.filterPredicate = (data, filter: string): boolean => {
       if (
@@ -49,45 +62,63 @@ export class AddBookComponent implements OnInit {
   loadAuthors() {
     // query database for existing authors and return them in array form
     this.authorService.getAuthors().then((_authors: Author[]) => {
-      this.author_options = _authors.map(
-        (x) => new Element(x.id, x.name, x.lname, false)
-      );
-      this.dataSource.data = this.author_options;
+      this.addBookForm.patchValue({
+        authorOptions: _authors.map(
+          (x) => new SelectedAuthor(x.id, x.name, x.lname, false)
+        ),
+      });
+      this.dataSource.data = this.addBookForm.value.authorOptions || [];
     });
   }
 
-  rowClicked(id: number) {
-    let author_element = this.author_options.find((x) => x.id === id);
-    if (author_element) {
-      author_element.checked = !author_element.checked;
-    }
+  rowClicked(author: SelectedAuthor) {
+    author.checked = !author.checked;
+    this.addBookForm.controls.authorOptions.updateValueAndValidity();
   }
 
   saveBook() {
-    const book: Book = {
-      id: undefined,
-      title: this.title,
-      editorial: this.editorial,
-      edition: this.edition,
-      condition: Number(this.condition),
-      position: this.position,
-    };
+    const { title, editorial, edition, condition, position, notes } =
+      this.addBookForm.value;
 
-    const authors = this.author_options
-      .filter((e) => e.checked)
+    const book = new Book(
+      undefined,
+      title || '',
+      editorial || '',
+      edition || '',
+      parseInt(<string>condition),
+      position || '',
+      notes || ''
+    );
+
+    const authors = this.addBookForm.value.authorOptions
+      ?.filter((e) => e.checked)
       .map((e) => new Author(e.id, e.name, e.lname));
-    this.bookService.registerBook(book, authors).then(r => this.loadAuthors());
+
+    this.bookService.registerBook(book, authors || []).then(
+      () => {
+        this.loadAuthors();
+        this.openSnackBar('Book saved successfully' + title);
+      },
+      (error) => {
+        this.openSnackBar('Error when saving the book');
+        console.error(error);
+      }
+    );
   }
 
   saveAuthor() {
-    let author: Element = new Element(
+    const authorName = this.addBookForm.value.author?.authorName;
+    const lastName = this.addBookForm.value.author?.lastName;
+
+    let author: SelectedAuthor = new SelectedAuthor(
       undefined,
-      this.author_name || '',
-      this.author_last_name || '',
+      authorName || '',
+      lastName || '',
       true
     );
-    this.author_options.push(author);
-    this.dataSource.data = this.author_options;
+    this.addBookForm.value.authorOptions?.push(author);
+    this.dataSource.data = this.addBookForm.value.authorOptions || [];
+    this.addBookForm.controls.authorOptions.updateValueAndValidity();
   }
 
   applyFilter(event: any) {
@@ -95,5 +126,51 @@ export class AddBookComponent implements OnInit {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
     this.dataSource.filter = filterValue;
+  }
+
+  openSnackBar(message: string) {
+    this._snackBar.open(message, 'Dismiss');
+  }
+
+  parseInt(value: string | null | undefined) {
+    return parseInt(<string>value);
+  }
+
+  authorValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      console.log(control.value);
+      const permitted = control.value.some(
+        (element: SelectedAuthor) => element.checked
+      );
+      console.log(permitted);
+      return permitted ? null : { error: true };
+    };
+  }
+
+  permittedValueValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const nameRe: RegExp = /^([1-5][a-eA-E])?$/i;
+      const permitted = nameRe.test(control.value);
+      return permitted ? null : {forbiddenName: {value: control.value}};
+    };
+  }
+
+  clearForm() {
+    this.addBookForm.reset({
+      title: '',
+      editorial: '',
+      edition: '',
+      condition: '1',
+      position: '',
+      notes: '',
+      author: {
+        authorName: '',
+        lastName: '',
+      },
+      authorOptions: this.addBookForm.value.authorOptions?.map((value) => {
+        value.checked = false
+        return value;
+      }),
+    });
   }
 }

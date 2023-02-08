@@ -14,6 +14,7 @@ export class BooksService {
       edition: book.edition,
       condition: book.condition,
       position: book.position,
+      notes: book.notes,
       authors: authors,
     };
 

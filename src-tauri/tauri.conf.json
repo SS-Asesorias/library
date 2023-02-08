@@ -5,8 +5,8 @@
   },
   "build": {
     "distDir": "../dist",
-    "devPath": "../dist",
-    "beforeDevCommand": "npm run web:dev",
+    "devPath": "http://localhost:4200/",
+    "beforeDevCommand": "npm run web:serve",
     "beforeBuildCommand": "npm run web:prod"
   },
   "tauri": {

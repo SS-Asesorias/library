@@ -1,3 +1,21 @@
-<div class="container">
-  <router-outlet></router-outlet>
-</div>
+<mat-sidenav-container class="h-100">
+  <mat-sidenav mode="side" opened fixedInViewport>
+    <mat-list role="list">
+      <ng-container *ngFor="let page of pages">
+        <mat-list-item role="listitem">
+          <button
+            mat-button
+            [routerLink]="[page.link]"
+            routerLinkActive="active"
+          >
+            {{ page.name }}
+          </button>
+        </mat-list-item>
+        <mat-divider></mat-divider>
+      </ng-container>
+    </mat-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>
