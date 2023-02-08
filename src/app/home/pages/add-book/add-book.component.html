@@ -1,8 +1,12 @@
 <div class="justify-content-center align-content-center">
   <form [formGroup]="addBookForm" (ngSubmit)="saveBook()">
     <mat-card class="m-3 p-2">
-      <mat-card-header>
+      <mat-card-header class="justify-content-between">
         <mat-card-title class="col-12 text-center">Add Book</mat-card-title>
+        <button mat-button type="button" (click)="clearForm()">
+          <mat-icon>clear</mat-icon>
+          Clear
+        </button>
       </mat-card-header>
       <mat-card-content>
         <hr />

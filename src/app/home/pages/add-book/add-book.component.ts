@@ -146,4 +146,23 @@ export class AddBookComponent implements OnInit {
       return permitted ? null : { error: true };
     };
   }
+
+  clearForm() {
+    this.addBookForm.reset({
+      title: '',
+      editorial: '',
+      edition: '',
+      condition: '1',
+      position: '',
+      notes: '',
+      author: {
+        authorName: '',
+        lastName: '',
+      },
+      authorOptions: this.addBookForm.value.authorOptions?.map((value) => {
+        value.checked = false
+        return value;
+      }),
+    });
+  }
 }
