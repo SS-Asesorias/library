@@ -1,124 +1,132 @@
 <div class="justify-content-center align-content-center">
-  <mat-card class="m-3 p-2">
-    <mat-card-header>
-      <mat-card-title class="col-12 text-center">Add Book</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <hr />
+  <form [formGroup]="addBookForm" (ngSubmit)="saveBook()">
+    <mat-card class="m-3 p-2">
+      <mat-card-header>
+        <mat-card-title class="col-12 text-center">Add Book</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <hr />
 
-      <div class="row align-items-center">
-        <mat-form-field class="col-12">
-          <mat-label>Title</mat-label>
-          <input [(ngModel)]="title" matInput />
-        </mat-form-field>
-      </div>
-      <div class="row">
-        <mat-form-field class="col-6">
-          <mat-label>Editorial</mat-label>
-          <input [(ngModel)]="editorial" matInput />
-        </mat-form-field>
-
-        <mat-form-field class="col-6">
-          <mat-label>Edition</mat-label>
-          <input [(ngModel)]="edition" matInput />
-        </mat-form-field>
-      </div>
-
-      <div class="row justify-content-between">
-        <mat-form-field class="col-4">
-          <mat-label>Position</mat-label>
-          <input [(ngModel)]="position" matInput />
-        </mat-form-field>
-
-        <div class="col-6">
-          <mat-label class="mw-100" id="condition-label">Condition</mat-label>
-
-          <mat-button-toggle-group [(ngModel)]="condition">
-            <ng-container *ngFor="let i of [1, 2, 3, 4, 5]">
-              <mat-button-toggle value="{{ i }}">
-                <mat-icon *ngIf="i <= condition" class="star">star</mat-icon>
-                <mat-icon *ngIf="i > condition" class="star"
-                  >star_border</mat-icon
-                >
-              </mat-button-toggle>
-            </ng-container>
-          </mat-button-toggle-group>
+        <div class="row align-items-center">
+          <mat-form-field class="col-12">
+            <mat-label>Title</mat-label>
+            <input formControlName="title" matInput />
+          </mat-form-field>
         </div>
-      </div>
+        <div class="row">
+          <mat-form-field class="col-6">
+            <mat-label>Editorial</mat-label>
+            <input formControlName="editorial" matInput />
+          </mat-form-field>
 
-      <div class="row">
-        <mat-form-field>
-          <mat-label>Leave a comment</mat-label>
-          <textarea matInput [(ngModel)]="notes"></textarea>
-        </mat-form-field>
-      </div>
+          <mat-form-field class="col-6">
+            <mat-label>Edition</mat-label>
+            <input formControlName="edition" matInput />
+          </mat-form-field>
+        </div>
 
-      <div class="row justify-content-between align">
-        <mat-form-field class="col-5">
-          <mat-label>Name</mat-label>
-          <input
-            (keyup)="applyFilter($event)"
-            [(ngModel)]="author_name"
-            matInput
-          />
-        </mat-form-field>
+        <div class="row justify-content-between">
+          <mat-form-field class="col-4">
+            <mat-label>Position</mat-label>
+            <input formControlName="position" matInput />
+          </mat-form-field>
 
-        <mat-form-field class="col-5">
-          <mat-label>Last Name</mat-label>
-          <input
-            (keyup)="applyFilter($event)"
-            [(ngModel)]="author_last_name"
-            matInput
-          />
-        </mat-form-field>
+          <div class="col-6">
+            <mat-label class="mw-100" id="condition-label">Condition</mat-label>
 
+            <mat-button-toggle-group formControlName="condition">
+              <ng-container *ngFor="let i of [1, 2, 3, 4, 5]">
+                <mat-button-toggle value="{{ i }}">
+                  <mat-icon
+                    *ngIf="i <= parseInt(addBookForm.value.condition)"
+                    class="star"
+                    >star</mat-icon
+                  >
+                  <mat-icon
+                    *ngIf="i > parseInt(addBookForm.value.condition)"
+                    class="star"
+                    >star_border
+                  </mat-icon>
+                </mat-button-toggle>
+              </ng-container>
+            </mat-button-toggle-group>
+          </div>
+        </div>
+
+        <div class="row">
+          <mat-form-field>
+            <mat-label>Leave a comment</mat-label>
+            <textarea matInput formControlName="notes"></textarea>
+          </mat-form-field>
+        </div>
+
+        <div class="row justify-content-between align" formGroupName="author">
+          <mat-form-field class="col-5">
+            <mat-label>Name</mat-label>
+            <input
+              (keyup)="applyFilter($event)"
+              formControlName="authorName"
+              matInput
+            />
+          </mat-form-field>
+
+          <mat-form-field class="col-5">
+            <mat-label>Last Name</mat-label>
+            <input
+              (keyup)="applyFilter($event)"
+              formControlName="lastName"
+              matInput
+            />
+          </mat-form-field>
+
+          <button
+            type="button"
+            (click)="saveAuthor()"
+            class="col-2 m-0"
+            mat-stroked-button
+          >
+            Add Author
+          </button>
+        </div>
+
+        <mat-table [dataSource]="dataSource">
+          <ng-container matColumnDef="name">
+            <mat-header-cell *matHeaderCellDef> Name</mat-header-cell>
+            <mat-cell *matCellDef="let author"> {{ author.name }} </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="lname">
+            <mat-header-cell *matHeaderCellDef> Last Name</mat-header-cell>
+            <mat-cell *matCellDef="let author"> {{ author.lname }} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="checked">
+            <mat-header-cell *matHeaderCellDef> Selected</mat-header-cell>
+            <mat-cell *matCellDef="let author">
+              <mat-checkbox
+                (click)="rowClicked(author)"
+                [checked]="author.checked"
+              >
+              </mat-checkbox>
+            </mat-cell>
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="columnsToDisplay"></mat-header-row>
+          <mat-row *matRowDef="let _; columns: columnsToDisplay"></mat-row>
+        </mat-table>
+      </mat-card-content>
+      <mat-card-actions>
         <button
-          (click)="saveAuthor()"
-          class="col-2 m-0"
-          mat-stroked-button
+          mat-fab
+          extended
           type="submit"
+          color="primary"
+          class="position-fixed bottom-0 end-0 m-3"
+          [disabled]="!addBookForm.valid"
         >
-          Add Author
+          <mat-icon>save</mat-icon>
+          Save Book
         </button>
-      </div>
-
-      <mat-table [dataSource]="dataSource">
-        <ng-container matColumnDef="name">
-          <mat-header-cell *matHeaderCellDef> Name</mat-header-cell>
-          <mat-cell *matCellDef="let author"> {{ author.name }} </mat-cell>
-        </ng-container>
-        <ng-container matColumnDef="lname">
-          <mat-header-cell *matHeaderCellDef> Last Name</mat-header-cell>
-          <mat-cell *matCellDef="let author"> {{ author.lname }} </mat-cell>
-        </ng-container>
-
-        <ng-container matColumnDef="checked">
-          <mat-header-cell *matHeaderCellDef> Selected </mat-header-cell>
-          <mat-cell *matCellDef="let author">
-            <mat-checkbox
-              (click)="rowClicked(author.id)"
-              [checked]="author.checked"
-            >
-            </mat-checkbox>
-          </mat-cell>
-        </ng-container>
-
-        <!---->
-        <mat-header-row *matHeaderRowDef="columnsToDisplay"></mat-header-row>
-        <mat-row *matRowDef="let _; columns: columnsToDisplay"></mat-row>
-      </mat-table>
-    </mat-card-content>
-    <mat-card-actions>
-      <button
-        mat-fab
-        extended
-        color="primary"
-        class="position-fixed bottom-0 end-0 m-3"
-        (click)="saveBook()"
-      >
-        <mat-icon>save</mat-icon>
-        Save Book
-      </button>
-    </mat-card-actions>
-  </mat-card>
+      </mat-card-actions>
+    </mat-card>
+  </form>
 </div>

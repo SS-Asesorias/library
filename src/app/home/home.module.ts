@@ -18,6 +18,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [AddBookComponent, HomeComponent, InventoryComponent],
@@ -39,5 +40,6 @@ import { MatListModule } from '@angular/material/list';
     MatSidenavModule,
     MatListModule,
   ],
+  providers: [MatSnackBar],
 })
 export class HomeModule {}
