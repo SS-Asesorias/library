@@ -26,7 +26,7 @@ export class AddBookComponent implements OnInit {
     editorial: new FormControl(''),
     edition: new FormControl(''),
     condition: new FormControl('1', [Validators.required]),
-    position: new FormControl(''),
+    position: new FormControl('', this.permittedValueValidator()),
     notes: new FormControl(''),
     author: new FormGroup({
       authorName: new FormControl(''),
@@ -144,6 +144,14 @@ export class AddBookComponent implements OnInit {
       );
       console.log(permitted);
       return permitted ? null : { error: true };
+    };
+  }
+
+  permittedValueValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const nameRe: RegExp = /^([1-5][a-eA-E])?$/i;
+      const permitted = nameRe.test(control.value);
+      return permitted ? null : {forbiddenName: {value: control.value}};
     };
   }
 
