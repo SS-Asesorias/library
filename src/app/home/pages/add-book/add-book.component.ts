@@ -4,7 +4,7 @@ import { AuthorService } from '../../../core/services/author.service';
 import { Book } from '../../../core/models/Book';
 import { Author } from '../../../core/models/Author';
 import { MatTableDataSource } from '@angular/material/table';
-import { Element } from '../../../shared/models/element';
+import { SelectedAuthor } from '../../../shared/models/selectedAuthor';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import {
   AbstractControl,
@@ -32,11 +32,11 @@ export class AddBookComponent implements OnInit {
       authorName: new FormControl(''),
       lastName: new FormControl(''),
     }),
-    authorOptions: new FormControl<Element[]>([], this.authorValidator()),
+    authorOptions: new FormControl<SelectedAuthor[]>([], this.authorValidator()),
   });
 
   columnsToDisplay = ['name', 'lname', 'checked'];
-  dataSource = new MatTableDataSource<Element>();
+  dataSource = new MatTableDataSource<SelectedAuthor>();
 
   constructor(
     private bookService: BooksService,
@@ -64,14 +64,14 @@ export class AddBookComponent implements OnInit {
     this.authorService.getAuthors().then((_authors: Author[]) => {
       this.addBookForm.patchValue({
         authorOptions: _authors.map(
-          (x) => new Element(x.id, x.name, x.lname, false)
+          (x) => new SelectedAuthor(x.id, x.name, x.lname, false)
         ),
       });
       this.dataSource.data = this.addBookForm.value.authorOptions || [];
     });
   }
 
-  rowClicked(author: Element) {
+  rowClicked(author: SelectedAuthor) {
     author.checked = !author.checked;
     this.addBookForm.controls.authorOptions.updateValueAndValidity();
   }
@@ -110,7 +110,7 @@ export class AddBookComponent implements OnInit {
     const authorName = this.addBookForm.value.author?.authorName;
     const lastName = this.addBookForm.value.author?.lastName;
 
-    let author: Element = new Element(
+    let author: SelectedAuthor = new SelectedAuthor(
       undefined,
       authorName || '',
       lastName || '',
@@ -140,7 +140,7 @@ export class AddBookComponent implements OnInit {
     return (control: AbstractControl): ValidationErrors | null => {
       console.log(control.value);
       const permitted = control.value.some(
-        (element: Element) => element.checked
+        (element: SelectedAuthor) => element.checked
       );
       console.log(permitted);
       return permitted ? null : { error: true };

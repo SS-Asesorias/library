@@ -1,4 +1,4 @@
-export class Element {
+export class SelectedAuthor {
     constructor(id: number | undefined, name: string, lname: string | undefined, checked: boolean) {
         this.id = id;
         this.name = name;
