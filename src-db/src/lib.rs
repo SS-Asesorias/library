@@ -4,11 +4,14 @@ use std::usize;
 
 use diesel::{Connection, RunQueryDsl};
 use diesel::sqlite::SqliteConnection;
+use diesel::{Connection, ExpressionMethods, QueryDsl, RunQueryDsl};
 use dotenvy::dotenv;
 
-use crate::models::authors::{_NewAuthor, Author};
-use crate::models::authors_books::AuthorsBooks;
-use crate::models::books::{_NewBook, Book, NewBook};
+use crate::models::{
+    authors::{Author, _NewAuthor},
+    authors_books::AuthorsBooks,
+    books::{Book, NewBook, _NewBook},
+};
 
 pub mod models;
 pub mod schema;
@@ -48,6 +51,12 @@ pub fn register_book(conn: &mut SqliteConnection, book: &NewBook) {
             }
         }
     }
+}
+
+pub fn get_books(conn: &mut SqliteConnection) -> Vec<Book> {
+    use self::schema::books::dsl::*;
+
+    books.load::<Book>(conn).expect("Error loading books")
 }
 
 pub fn get_authors(conn: &mut SqliteConnection) -> Vec<Author> {
