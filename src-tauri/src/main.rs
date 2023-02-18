@@ -3,7 +3,7 @@
     windows_subsystem = "windows"
 )]
 
-use crate::commands::{get_all_authors, register_book_command};
+use crate::commands::{get_all_authors_command, get_books_command, register_book_command};
 use std::fs;
 use std::path::Path;
 use tauri::api::path::app_local_data_dir;
@@ -33,7 +33,8 @@ fn main() {
         })
         .invoke_handler(tauri::generate_handler![
             register_book_command,
-            get_all_authors,
+            get_all_authors_command,
+            get_books_command,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

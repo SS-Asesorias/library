@@ -20,4 +20,8 @@ export class BooksService {
 
     await invoke('register_book_command', { newBook: newBook });
   }
+
+  async getBooks(): Promise<Book[]> {
+    return await invoke('get_books_command');
+  }
 }
