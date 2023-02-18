@@ -11,6 +11,10 @@ import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
 
 import { HomeModule } from './home/home.module';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatIconModule } from '@angular/material/icon';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   bootstrap: [AppComponent],
@@ -26,6 +30,10 @@ import { HomeModule } from './home/home.module';
     MatButtonModule,
     BrowserAnimationsModule,
     HomeModule,
+    MatButtonToggleModule,
+    MatIconModule,
+    MatCheckboxModule,
+    ReactiveFormsModule,
   ],
   providers: [],
 })

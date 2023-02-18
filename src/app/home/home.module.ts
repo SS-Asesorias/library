@@ -6,6 +6,7 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { AddBookComponent } from './pages/add-book/add-book.component';
 import { HomeComponent } from './home.component';
 import { InventoryComponent } from './pages/inventory/inventory.component';
+import { BookFormComponent } from '../shared/components/book-form/book-form.component';
 
 // Angular Material components
 import { MatCardModule } from '@angular/material/card';
@@ -19,9 +20,15 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 @NgModule({
-  declarations: [AddBookComponent, HomeComponent, InventoryComponent],
+  declarations: [
+    AddBookComponent,
+    HomeComponent,
+    InventoryComponent,
+    BookFormComponent,
+  ],
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -39,6 +46,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
     MatCheckboxModule,
     MatSidenavModule,
     MatListModule,
+    MatPaginatorModule,
   ],
   providers: [MatSnackBar],
 })

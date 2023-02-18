@@ -7,6 +7,7 @@
     "build": "npm run tauri:bundle",
     "linux:start": "toolbox run bash -c 'source $HOME/.bashrc && npm start'",
     "linux:build": "toolbox run bash -c 'source $HOME/.bashrc && npm run build'",
+    "linux:build_debug": "toolbox run bash -c 'source $HOME/.bashrc && npm run build --debug'",
     "web:serve": "ng serve -o",
     "web:build": "ng build --base-href ./",
     "web:dev": "npm run web:build",
