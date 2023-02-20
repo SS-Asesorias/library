@@ -1,12 +1,14 @@
 #![cfg_attr(
-    all(not(debug_assertions), target_os = "windows"),
-    windows_subsystem = "windows"
+all(not(debug_assertions), target_os = "windows"),
+windows_subsystem = "windows"
 )]
 
-use crate::commands::{get_all_authors_command, get_books_command, register_book_command};
 use std::fs;
 use std::path::Path;
+
 use tauri::api::path::app_local_data_dir;
+
+use crate::commands::{get_all_authors_command, get_authors_by_book_command, get_book_command, get_books_command, register_book_command};
 
 pub mod commands;
 
@@ -35,6 +37,8 @@ fn main() {
             register_book_command,
             get_all_authors_command,
             get_books_command,
+            get_authors_by_book_command,
+            get_book_command,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

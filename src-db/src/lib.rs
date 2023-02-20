@@ -2,14 +2,14 @@ pub extern crate diesel;
 
 use std::usize;
 
-use diesel::sqlite::SqliteConnection;
 use diesel::{Connection, ExpressionMethods, QueryDsl, RunQueryDsl};
+use diesel::sqlite::SqliteConnection;
 use dotenvy::dotenv;
 
 use crate::models::{
-    authors::{Author, _NewAuthor},
+    authors::{_NewAuthor, Author},
     authors_books::AuthorsBooks,
-    books::{Book, NewBook, _NewBook},
+    books::{_NewBook, Book, NewBook},
 };
 
 pub mod models;
@@ -56,6 +56,12 @@ pub fn get_books(conn: &mut SqliteConnection) -> Vec<Book> {
     use self::schema::books::dsl::*;
 
     books.load::<Book>(conn).expect("Error loading books")
+}
+
+pub fn get_book_by_id(conn: &mut SqliteConnection, book_id: i32) -> Vec<Book> {
+    use self::schema::books::dsl::*;
+
+    books.filter(id.eq(book_id)).load::<Book>(conn).expect("Error loading books")
 }
 
 pub fn get_authors(conn: &mut SqliteConnection) -> Vec<Author> {

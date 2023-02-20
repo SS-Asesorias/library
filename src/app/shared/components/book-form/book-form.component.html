@@ -1,5 +1,5 @@
 <div class="justify-content-center align-content-center">
-    <form (ngSubmit)="saveBook()" [formGroup]="addBookForm">
+    <form (ngSubmit)="saveBook()" [formGroup]="bookForm">
         <mat-card class="m-3 p-2">
             <mat-card-header class="justify-content-between">
                 <mat-card-title class="col-12 text-center">{{pageName}}</mat-card-title>
@@ -42,13 +42,13 @@
                             <ng-container *ngFor="let i of [1, 2, 3, 4, 5]">
                                 <mat-button-toggle value="{{ i }}">
                                     <mat-icon
-                                            *ngIf="i <= parseInt(addBookForm.value.condition)"
+                                            *ngIf="i <= parseInt(bookForm.value.condition)"
                                             class="star"
                                     >star
                                     </mat-icon
                                     >
                                     <mat-icon
-                                            *ngIf="i > parseInt(addBookForm.value.condition)"
+                                            *ngIf="i > parseInt(bookForm.value.condition)"
                                             class="star"
                                     >star_border
                                     </mat-icon>
@@ -118,15 +118,10 @@
                     <mat-header-row *matHeaderRowDef="columnsToDisplay"></mat-header-row>
                     <mat-row *matRowDef="let _; columns: columnsToDisplay"></mat-row>
                 </mat-table>
-                <mat-paginator #paginator
-                               [pageSizeOptions]="[5, 10, 20]"
-                               [pageSize]="5"
-                               [showFirstLastButtons]="true">
-                </mat-paginator>
             </mat-card-content>
             <mat-card-actions>
                 <button
-                        [disabled]="!addBookForm.valid"
+                        [disabled]="!bookForm.valid"
                         class="position-fixed bottom-0 end-0 m-3"
                         color="primary"
                         extended

@@ -21,6 +21,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { EditBookComponent } from './pages/edit-book/edit-book.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     HomeComponent,
     InventoryComponent,
     BookFormComponent,
+    EditBookComponent,
   ],
   imports: [
     CommonModule,

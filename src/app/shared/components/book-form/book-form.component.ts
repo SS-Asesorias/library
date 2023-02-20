@@ -1,10 +1,4 @@
-import {
-  AfterViewInit,
-  Component,
-  Input,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { BooksService } from 'src/app/core/services/books.service';
 import { AuthorService } from '../../../core/services/author.service';
 import { Book } from '../../../core/models/Book';
@@ -20,18 +14,17 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
-import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'book-form',
   templateUrl: './book-form.component.html',
   styleUrls: ['./book-form.component.scss'],
 })
-export class BookFormComponent implements OnInit, AfterViewInit {
+export class BookFormComponent implements OnInit {
   @Input() bookId: number | undefined = undefined;
   @Input() pageName: string = '';
 
-  addBookForm = new FormGroup({
+  bookForm = new FormGroup({
     title: new FormControl('', [Validators.required]),
     editorial: new FormControl(''),
     edition: new FormControl(''),
@@ -50,14 +43,12 @@ export class BookFormComponent implements OnInit, AfterViewInit {
 
   columnsToDisplay = ['name', 'lname', 'checked'];
   dataSource = new MatTableDataSource<SelectedAuthor>();
-  @ViewChild(MatPaginator) paginator: MatPaginator | null = null;
 
   constructor(
     private bookService: BooksService,
     private authorService: AuthorService,
     private _snackBar: MatSnackBar
   ) {
-    console.log(`Passed book id: ${this.bookId}`);
     this.dataSource.filterPredicate = (data, filter: string): boolean => {
       if (
         data.name?.toLowerCase().includes(filter) ||
@@ -70,39 +61,59 @@ export class BookFormComponent implements OnInit, AfterViewInit {
     };
   }
 
-  /**
-   * Set the paginator after the view init since this component will
-   * be able to query its view for the initialized paginator.
-   */
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-  }
-
   ngOnInit() {
     this.loadAuthors();
-    // todo: use bookId (if not undefined) to retrieve the book data.
+    if (this.bookId !== undefined) {
+      console.log(`Passed book id: ${this.bookId}`);
+      this.bookService.getBook(this.bookId).then(
+        (result: Book) => {
+          console.log('result: ' + typeof result);
+          this.bookForm.patchValue({
+            title: result.title,
+            condition: result.condition.toString(),
+            position: result.position,
+            edition: result.edition,
+            editorial: result.editorial,
+            notes: result.notes,
+          });
+        },
+        (error: any) => {
+          console.error(error);
+        }
+      );
+      // query database for authors of this book and set "selected" to true
+      this.authorService
+        .getAuthorsByBook(this.bookId)
+        .then((_authors: Author[]) => {
+          this.bookForm.patchValue({
+            authorOptions: _authors.map(
+              (x: Author) => new SelectedAuthor(x.id, x.name, x.lname, true)
+            ),
+          });
+        });
+    }
   }
 
   loadAuthors() {
     // query database for existing authors and return them in array form
     this.authorService.getAuthors().then((_authors: Author[]) => {
-      this.addBookForm.patchValue({
+      this.bookForm.patchValue({
         authorOptions: _authors.map(
           (x) => new SelectedAuthor(x.id, x.name, x.lname, false)
         ),
       });
-      this.dataSource.data = this.addBookForm.value.authorOptions || [];
+      this.dataSource.data = this.bookForm.value.authorOptions || [];
     });
   }
 
   rowClicked(author: SelectedAuthor) {
     author.checked = !author.checked;
-    this.addBookForm.controls.authorOptions.updateValueAndValidity();
+    this.bookForm.controls.authorOptions.updateValueAndValidity();
   }
 
   saveBook() {
     const { title, editorial, edition, condition, position, notes } =
-      this.addBookForm.value;
+      this.bookForm.value;
 
     const book = new Book(
       undefined,
@@ -114,7 +125,7 @@ export class BookFormComponent implements OnInit, AfterViewInit {
       notes || ''
     );
 
-    const authors = this.addBookForm.value.authorOptions
+    const authors = this.bookForm.value.authorOptions
       ?.filter((e) => e.checked)
       .map((e) => new Author(e.id, e.name, e.lname));
 
@@ -131,8 +142,8 @@ export class BookFormComponent implements OnInit, AfterViewInit {
   }
 
   saveAuthor() {
-    const authorName = this.addBookForm.value.author?.authorName;
-    const lastName = this.addBookForm.value.author?.lastName;
+    const authorName = this.bookForm.value.author?.authorName;
+    const lastName = this.bookForm.value.author?.lastName;
 
     let author: SelectedAuthor = new SelectedAuthor(
       undefined,
@@ -140,9 +151,9 @@ export class BookFormComponent implements OnInit, AfterViewInit {
       lastName || '',
       true
     );
-    this.addBookForm.value.authorOptions?.push(author);
-    this.dataSource.data = this.addBookForm.value.authorOptions || [];
-    this.addBookForm.controls.authorOptions.updateValueAndValidity();
+    this.bookForm.value.authorOptions?.push(author);
+    this.dataSource.data = this.bookForm.value.authorOptions || [];
+    this.bookForm.controls.authorOptions.updateValueAndValidity();
   }
 
   applyFilter(event: any) {
@@ -162,11 +173,9 @@ export class BookFormComponent implements OnInit, AfterViewInit {
 
   authorValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
-      console.log(control.value);
       const permitted = control.value.some(
         (element: SelectedAuthor) => element.checked
       );
-      console.log(permitted);
       return permitted ? null : { error: true };
     };
   }
@@ -180,7 +189,7 @@ export class BookFormComponent implements OnInit, AfterViewInit {
   }
 
   clearForm() {
-    this.addBookForm.reset({
+    this.bookForm.reset({
       title: '',
       editorial: '',
       edition: '',
@@ -191,7 +200,7 @@ export class BookFormComponent implements OnInit, AfterViewInit {
         authorName: '',
         lastName: '',
       },
-      authorOptions: this.addBookForm.value.authorOptions?.map((value) => {
+      authorOptions: this.bookForm.value.authorOptions?.map((value) => {
         value.checked = false;
         return value;
       }),

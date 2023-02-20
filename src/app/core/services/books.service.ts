@@ -22,6 +22,10 @@ export class BooksService {
   }
 
   async getBooks(): Promise<Book[]> {
-    return await invoke('get_books_command');
+    return await invoke<Book[]>('get_books_command');
+  }
+
+  async getBook(id: number): Promise<Book> {
+    return await invoke<Book>('get_book_command', { id: id });
   }
 }
