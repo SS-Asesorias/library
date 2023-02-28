@@ -2,13 +2,15 @@ pub extern crate diesel;
 
 use std::usize;
 
-use diesel::{Connection, RunQueryDsl};
+use diesel::{Connection, ExpressionMethods, QueryDsl, RunQueryDsl};
 use diesel::sqlite::SqliteConnection;
 use dotenvy::dotenv;
 
-use crate::models::authors::{_NewAuthor, Author};
-use crate::models::authors_books::AuthorsBooks;
-use crate::models::books::{_NewBook, Book, NewBook};
+use crate::models::{
+    authors::{_NewAuthor, Author},
+    authors_books::AuthorsBooks,
+    books::{_NewBook, Book, NewBook},
+};
 
 pub mod models;
 pub mod schema;
@@ -50,10 +52,55 @@ pub fn register_book(conn: &mut SqliteConnection, book: &NewBook) {
     }
 }
 
+pub fn get_books(conn: &mut SqliteConnection) -> Vec<Book> {
+    use self::schema::books::dsl::*;
+
+    books.load::<Book>(conn).expect("Error loading books")
+}
+
+pub fn get_book_by_id(conn: &mut SqliteConnection, book_id: i32) -> Book {
+    use self::schema::books::dsl::*;
+
+    books.filter(id.eq(book_id)).first::<Book>(conn).expect("Error loading books")
+}
+
 pub fn get_authors(conn: &mut SqliteConnection) -> Vec<Author> {
     use self::schema::authors::dsl::*;
 
     authors.load::<Author>(conn).expect("Error loading authors")
+}
+
+pub fn get_authors_by_book(conn: &mut SqliteConnection, book: i32) -> Vec<Author> {
+    use self::schema::authors::dsl::*;
+    use self::schema::authors_books::dsl::*;
+
+    let authors_id = authors_books.select(author_id).filter(book_id.eq(book));
+
+    authors
+        .filter(id.eq_any(authors_id))
+        .load::<Author>(conn)
+        .expect(format!("Error loading authors of book: {}", book).as_str())
+}
+
+pub fn update_book(conn: &mut SqliteConnection, book_id: i32, modified_book: NewBook) {
+    use crate::schema::books::dsl::*;
+
+    let book = Book {
+        id: book_id,
+        title: modified_book.title,
+        editorial: modified_book.editorial,
+        edition: modified_book.edition,
+        condition: modified_book.condition,
+        notes: modified_book.notes,
+        position: modified_book.position,
+    };
+
+    diesel::update(books.filter(id.eq(book_id)))
+        .set(book)
+        .execute(conn)
+        .expect(format!("Error updating book: {}", book_id).as_str());
+
+    
 }
 
 fn create_book(conn: &mut SqliteConnection, new_book: &_NewBook) -> Book {

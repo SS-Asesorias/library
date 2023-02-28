@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { AddBookComponent } from './home/pages/add-book/add-book.component';
+import { EditBookComponent } from './home/pages/edit-book/edit-book.component';
 import { InventoryComponent } from './home/pages/inventory/inventory.component';
 
 const routes: Routes = [
@@ -14,6 +15,10 @@ const routes: Routes = [
       {
         path: 'add-book',
         component: AddBookComponent,
+      },
+      {
+        path: 'edit-book/:bookId',
+        component: EditBookComponent,
       },
       {
         path: 'inventory',
