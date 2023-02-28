@@ -4,7 +4,7 @@ import { AuthorService } from '../../../core/services/author.service';
 import { Book } from '../../../core/models/Book';
 import { Author } from '../../../core/models/Author';
 import { MatTableDataSource } from '@angular/material/table';
-import { SelectedAuthor } from '../../../shared/models/selectedAuthor';
+import { SelectedAuthor } from '../../models/selectedAuthor';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import {
   AbstractControl,
@@ -67,7 +67,6 @@ export class BookFormComponent implements OnInit {
       console.log(`Passed book id: ${this.bookId}`);
       this.bookService.getBook(this.bookId).then(
         (result: Book) => {
-          console.log('result: ' + typeof result);
           this.bookForm.patchValue({
             title: result.title,
             condition: result.condition.toString(),
@@ -86,10 +85,17 @@ export class BookFormComponent implements OnInit {
         .getAuthorsByBook(this.bookId)
         .then((_authors: Author[]) => {
           this.bookForm.patchValue({
-            authorOptions: _authors.map(
-              (x: Author) => new SelectedAuthor(x.id, x.name, x.lname, true)
+            authorOptions: this.bookForm.value.authorOptions?.map(
+              (x) =>
+                new SelectedAuthor(
+                  x.id,
+                  x.name,
+                  x.lname,
+                  _authors.findIndex((value) => value.id === x.id) !== -1
+                )
             ),
           });
+          this.dataSource.data = this.bookForm.value.authorOptions || [];
         });
     }
   }
@@ -112,6 +118,44 @@ export class BookFormComponent implements OnInit {
   }
 
   saveBook() {
+    if (this.bookId !== undefined) {
+      this.saveChanges();
+    } else {
+      this.saveNewBook();
+    }
+  }
+
+  saveChanges() {
+    const { title, editorial, edition, condition, position, notes } =
+        this.bookForm.value;
+
+    const book = new Book(
+        this.bookId,
+        title || '',
+        editorial || '',
+        edition || '',
+        parseInt(<string>condition),
+        position || '',
+        notes || '',
+    );
+
+    const authors = this.bookForm.value.authorOptions
+        ?.filter((e) => e.checked)
+        .map((e) => new Author(e.id, e.name, e.lname));
+
+    this.bookService.updateBook(book, authors || []).then(
+        () => {
+          this.loadAuthors();
+          this.openSnackBar('Book saved successfully' + title);
+        },
+        (error) => {
+          this.openSnackBar('Error when saving the book');
+          console.error(error);
+        }
+    );
+  }
+
+  saveNewBook() {
     const { title, editorial, edition, condition, position, notes } =
       this.bookForm.value;
 

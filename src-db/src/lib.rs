@@ -79,7 +79,28 @@ pub fn get_authors_by_book(conn: &mut SqliteConnection, book: i32) -> Vec<Author
     authors
         .filter(id.eq_any(authors_id))
         .load::<Author>(conn)
-        .expect(&*format!("Error loading authors of book: {}", book))
+        .expect(format!("Error loading authors of book: {}", book).as_str())
+}
+
+pub fn update_book(conn: &mut SqliteConnection, book_id: i32, modified_book: NewBook) {
+    use crate::schema::books::dsl::*;
+
+    let book = Book {
+        id: book_id,
+        title: modified_book.title,
+        editorial: modified_book.editorial,
+        edition: modified_book.edition,
+        condition: modified_book.condition,
+        notes: modified_book.notes,
+        position: modified_book.position,
+    };
+
+    diesel::update(books.filter(id.eq(book_id)))
+        .set(book)
+        .execute(conn)
+        .expect(format!("Error updating book: {}", book_id).as_str());
+
+    
 }
 
 fn create_book(conn: &mut SqliteConnection, new_book: &_NewBook) -> Book {

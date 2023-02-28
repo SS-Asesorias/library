@@ -1,4 +1,4 @@
-use src_db::{establish_connection, get_authors, get_authors_by_book, get_book_by_id, get_books, register_book};
+use src_db::{establish_connection, get_authors, get_authors_by_book, get_book_by_id, get_books, register_book, update_book};
 use src_db::diesel::SqliteConnection;
 use src_db::models::authors::Author;
 use src_db::models::books::{Book, NewBook};
@@ -33,6 +33,12 @@ pub async fn get_books_command(handle: AppHandle<Wry>) -> Vec<Book> {
 pub async fn get_book_command(handle: AppHandle<Wry>, id: i32) -> Book {
     let mut conn = get_database_connection(&handle);
     get_book_by_id(&mut conn, id)
+}
+
+#[tauri::command]
+pub async fn update_book_command(handle: AppHandle<Wry>, book_id: i32, modified_book: NewBook) {
+    let mut conn = get_database_connection(&handle);
+    update_book(&mut conn, book_id, modified_book)
 }
 
 fn get_database_connection(handle: &AppHandle<Wry>) -> SqliteConnection {
