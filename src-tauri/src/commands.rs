@@ -30,7 +30,7 @@ pub async fn get_books_command(handle: AppHandle<Wry>) -> Vec<Book> {
 }
 
 #[tauri::command]
-pub async fn get_book_command(handle: AppHandle<Wry>, id: i32) -> Vec<Book> {
+pub async fn get_book_command(handle: AppHandle<Wry>, id: i32) -> Book {
     let mut conn = get_database_connection(&handle);
     get_book_by_id(&mut conn, id)
 }

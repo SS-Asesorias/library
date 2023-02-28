@@ -58,10 +58,10 @@ pub fn get_books(conn: &mut SqliteConnection) -> Vec<Book> {
     books.load::<Book>(conn).expect("Error loading books")
 }
 
-pub fn get_book_by_id(conn: &mut SqliteConnection, book_id: i32) -> Vec<Book> {
+pub fn get_book_by_id(conn: &mut SqliteConnection, book_id: i32) -> Book {
     use self::schema::books::dsl::*;
 
-    books.filter(id.eq(book_id)).load::<Book>(conn).expect("Error loading books")
+    books.filter(id.eq(book_id)).first::<Book>(conn).expect("Error loading books")
 }
 
 pub fn get_authors(conn: &mut SqliteConnection) -> Vec<Author> {
