@@ -14,7 +14,7 @@ export class InventoryComponent implements OnInit {
 
   ngOnInit() {
     this.booksService.getBooks().then(
-      (result) => {
+      (result : Book[]) => {
         this.books = result;
       },
       (error) => {

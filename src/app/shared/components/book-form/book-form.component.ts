@@ -126,8 +126,14 @@ export class BookFormComponent implements OnInit {
   }
 
   saveChanges() {
-    const { title, editorial, edition, condition, position, notes } =
-        this.bookForm.value;
+    const {
+      title,
+      editorial,
+      edition,
+      condition,
+      position,
+      notes
+    } = this.bookForm.value;
 
     const book = new Book(
         this.bookId,
@@ -146,7 +152,7 @@ export class BookFormComponent implements OnInit {
     this.bookService.updateBook(book, authors || []).then(
         () => {
           this.loadAuthors();
-          this.openSnackBar('Book saved successfully' + title);
+          this.openSnackBar('Book saved successfully: ' + title);
         },
         (error) => {
           this.openSnackBar('Error when saving the book');
@@ -156,8 +162,14 @@ export class BookFormComponent implements OnInit {
   }
 
   saveNewBook() {
-    const { title, editorial, edition, condition, position, notes } =
-      this.bookForm.value;
+    const {
+      title,
+      editorial,
+      edition,
+      condition,
+      position,
+      notes
+    } = this.bookForm.value;
 
     const book = new Book(
       undefined,

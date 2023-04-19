@@ -7,7 +7,7 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./edit-book.component.scss'],
 })
 export class EditBookComponent implements OnInit {
-  bookId: Number | undefined = undefined;
+  bookId: number | undefined = undefined;
 
   constructor(private route: ActivatedRoute) {
     const routeParams = this.route.snapshot.paramMap;
