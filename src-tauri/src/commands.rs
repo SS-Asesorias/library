@@ -1,9 +1,12 @@
-use src_db::{establish_connection, get_authors, get_authors_by_book, get_book_by_id, get_books, register_book, update_book};
 use src_db::diesel::SqliteConnection;
 use src_db::models::authors::Author;
 use src_db::models::books::{Book, NewBook};
-use tauri::{AppHandle, Wry};
+use src_db::{
+    establish_connection, get_authors, get_authors_by_book, get_book_by_id, get_books,
+    register_book, update_book,
+};
 use tauri::api::path::app_local_data_dir;
+use tauri::{AppHandle, Wry};
 
 #[tauri::command]
 pub async fn register_book_command(handle: AppHandle<Wry>, new_book: NewBook) {

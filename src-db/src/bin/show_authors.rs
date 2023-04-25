@@ -2,8 +2,8 @@ use std::env;
 
 use diesel::prelude::*;
 use dotenvy::dotenv;
-use src_db::*;
 use src_db::models::authors::Author;
+use src_db::*;
 
 fn main() {
     use self::schema::authors::dsl::*;
