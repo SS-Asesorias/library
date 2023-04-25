@@ -31,8 +31,8 @@ export class BooksService {
 
   async updateBook(book: Book, authors: Author[]): Promise<unknown> {
     return await invoke('update_book_command', {
-      book_id: book.id,
-      modified_book: { ...book, authors },
+      bookId: book.id,
+      modifiedBook: { ...book, authors },
     });
   }
 }
