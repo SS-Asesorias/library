@@ -2,14 +2,15 @@ pub extern crate diesel;
 
 use std::usize;
 
-use diesel::{Connection, ExpressionMethods, QueryDsl, RunQueryDsl};
 use diesel::sqlite::SqliteConnection;
+use diesel::{Connection, ExpressionMethods, QueryDsl, RunQueryDsl};
 use dotenvy::dotenv;
 
+use crate::models::authors::NewAuthor;
 use crate::models::{
-    authors::{_NewAuthor, Author},
+    authors::{Author, _NewAuthor},
     authors_books::AuthorsBooks,
-    books::{_NewBook, Book, NewBook},
+    books::{Book, NewBook, _NewBook},
 };
 
 pub mod models;
@@ -33,23 +34,7 @@ pub fn register_book(conn: &mut SqliteConnection, book: &NewBook) {
 
     let inserted_book = create_book(conn, &insertable_book);
 
-    for author in &book.authors {
-        match author.id {
-            None => {
-                let insertable_author = _NewAuthor {
-                    name: author.name.as_str(),
-                    lname: author.lname.as_str(),
-                };
-
-                let inserted_author = create_author(conn, &insertable_author);
-
-                create_author_book(conn, inserted_author.id, inserted_book.id);
-            }
-            Some(id) => {
-                create_author_book(conn, id, inserted_book.id);
-            }
-        }
-    }
+    save_all_authors(conn, inserted_book.id, &book.authors);
 }
 
 pub fn get_books(conn: &mut SqliteConnection) -> Vec<Book> {
@@ -61,7 +46,10 @@ pub fn get_books(conn: &mut SqliteConnection) -> Vec<Book> {
 pub fn get_book_by_id(conn: &mut SqliteConnection, book_id: i32) -> Book {
     use self::schema::books::dsl::*;
 
-    books.filter(id.eq(book_id)).first::<Book>(conn).expect("Error loading books")
+    books
+        .filter(id.eq(book_id))
+        .first::<Book>(conn)
+        .expect("Error loading books")
 }
 
 pub fn get_authors(conn: &mut SqliteConnection) -> Vec<Author> {
@@ -83,7 +71,7 @@ pub fn get_authors_by_book(conn: &mut SqliteConnection, book: i32) -> Vec<Author
 }
 
 pub fn update_book(conn: &mut SqliteConnection, book_id: i32, modified_book: NewBook) {
-    use crate::schema::books::dsl::*;
+    use self::schema::books::dsl::*;
 
     let book = Book {
         id: book_id,
@@ -100,7 +88,38 @@ pub fn update_book(conn: &mut SqliteConnection, book_id: i32, modified_book: New
         .execute(conn)
         .expect(format!("Error updating book: {}", book_id).as_str());
 
-    
+    delete_authors_from_book(conn, book_id);
+
+    let authors: Vec<NewAuthor> = modified_book.authors;
+    save_all_authors(conn, book_id, &authors);
+}
+
+fn save_all_authors(conn: &mut SqliteConnection, book_id: i32, authors: &Vec<NewAuthor>) {
+    for author in authors {
+        match author.id {
+            None => {
+                let insertable_author = _NewAuthor {
+                    name: author.name.as_str(),
+                    lname: author.lname.as_str(),
+                };
+
+                let inserted_author = create_author(conn, &insertable_author);
+
+                create_author_book(conn, inserted_author.id, book_id);
+            }
+            Some(value) => {
+                create_author_book(conn, value, book_id);
+            }
+        }
+    }
+}
+
+fn delete_authors_from_book(conn: &mut SqliteConnection, from_book: i32) {
+    use self::schema::authors_books::dsl::*;
+
+    diesel::delete(authors_books.filter(book_id.eq(from_book)))
+        .execute(conn)
+        .expect(format!("Error clearing authors for book: {}", from_book).as_str());
 }
 
 fn create_book(conn: &mut SqliteConnection, new_book: &_NewBook) -> Book {
