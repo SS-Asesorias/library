@@ -42,7 +42,7 @@ export class BookFormComponent implements OnInit {
   });
 
   columnsToDisplay = ['name', 'lname', 'checked'];
-  dataSource = new MatTableDataSource<SelectedAuthor>();
+  dataSource:MatTableDataSource<SelectedAuthor> = new MatTableDataSource<SelectedAuthor>();
 
   constructor(
     private bookService: BooksService,
@@ -61,10 +61,9 @@ export class BookFormComponent implements OnInit {
     };
   }
 
-  ngOnInit() {
-    this.loadAuthors();
+  async ngOnInit() {
+    await this.loadAuthors();
     if (this.bookId !== undefined) {
-      console.log(`Passed book id: ${this.bookId}`);
       this.bookService.getBook(this.bookId).then(
         (result: Book) => {
           this.bookForm.patchValue({
@@ -80,36 +79,40 @@ export class BookFormComponent implements OnInit {
           console.error(error);
         }
       );
-      // query database for authors of this book and set "selected" to true
+    }
+  }
+
+  async loadAuthors():Promise<void> {
+    // query database for existing authors and return them in array form
+    await this.authorService.getAuthors().then((_authors: Author[]) => {
+      this.bookForm.patchValue({
+        authorOptions: _authors.map(
+          (x:Author) => new SelectedAuthor(x.id, x.name, x.lname, false)
+        ),
+      });
+      this.dataSource.data = this.bookForm.value.authorOptions || [];
+    });
+
+    // query database for authors of this book and set "selected" to true
+    if (this.bookId !== undefined){
       this.authorService
         .getAuthorsByBook(this.bookId)
         .then((_authors: Author[]) => {
           this.bookForm.patchValue({
             authorOptions: this.bookForm.value.authorOptions?.map(
-              (x) =>
-                new SelectedAuthor(
-                  x.id,
-                  x.name,
-                  x.lname,
-                  _authors.findIndex((value) => value.id === x.id) !== -1
-                )
+              (x) => new SelectedAuthor(
+                x.id,
+                x.name,
+                x.lname,
+                _authors.findIndex(
+                  (value:Author):boolean => value.id === x.id
+                ) !== -1
+              )
             ),
           });
           this.dataSource.data = this.bookForm.value.authorOptions || [];
         });
     }
-  }
-
-  loadAuthors() {
-    // query database for existing authors and return them in array form
-    this.authorService.getAuthors().then((_authors: Author[]) => {
-      this.bookForm.patchValue({
-        authorOptions: _authors.map(
-          (x) => new SelectedAuthor(x.id, x.name, x.lname, false)
-        ),
-      });
-      this.dataSource.data = this.bookForm.value.authorOptions || [];
-    });
   }
 
   rowClicked(author: SelectedAuthor) {
@@ -125,7 +128,7 @@ export class BookFormComponent implements OnInit {
     }
   }
 
-  saveChanges() {
+  saveChanges() {//
     const {
       title,
       editorial,
@@ -145,12 +148,12 @@ export class BookFormComponent implements OnInit {
         notes || '',
     );
 
-    const authors = this.bookForm.value.authorOptions
-        ?.filter((e) => e.checked)
-        .map((e) => new Author(e.id, e.name, e.lname));
+    const authors:Author[] | undefined = this.bookForm.value.authorOptions
+        ?.filter((e:SelectedAuthor) => e.checked)
+        .map((e:SelectedAuthor) => new Author(e.id, e.name, e.lname));
 
     this.bookService.updateBook(book, authors || []).then(
-        () => {
+        ():void => {
           this.loadAuthors();
           this.openSnackBar('Book saved successfully: ' + title);
         },
@@ -181,9 +184,9 @@ export class BookFormComponent implements OnInit {
       notes || ''
     );
 
-    const authors = this.bookForm.value.authorOptions
-      ?.filter((e) => e.checked)
-      .map((e) => new Author(e.id, e.name, e.lname));
+    const authors:Author[] | undefined = this.bookForm.value.authorOptions
+      ?.filter((e:SelectedAuthor) => e.checked)
+      .map((e:SelectedAuthor) => new Author(e.id, e.name, e.lname));
 
     this.bookService.registerBook(book, authors || []).then(
       () => {
@@ -239,7 +242,7 @@ export class BookFormComponent implements OnInit {
   permittedValueValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const nameRe: RegExp = /^([1-5][a-eA-E])?$/i;
-      const permitted = nameRe.test(control.value);
+      const permitted:boolean = nameRe.test(control.value);
       return permitted ? null : { forbiddenName: { value: control.value } };
     };
   }
