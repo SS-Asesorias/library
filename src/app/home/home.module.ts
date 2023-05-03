@@ -22,6 +22,11 @@ import { MatListModule } from '@angular/material/list';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { EditBookComponent } from './pages/edit-book/edit-book.component';
+import { MatExpansionModule } from '@angular/material/expansion';
+import {
+  CdkFixedSizeVirtualScroll,
+  CdkVirtualForOf,
+} from '@angular/cdk/scrolling';
 
 @NgModule({
   declarations: [
@@ -49,6 +54,9 @@ import { EditBookComponent } from './pages/edit-book/edit-book.component';
     MatSidenavModule,
     MatListModule,
     MatPaginatorModule,
+    MatExpansionModule,
+    CdkFixedSizeVirtualScroll,
+    CdkVirtualForOf,
   ],
   providers: [MatSnackBar],
 })

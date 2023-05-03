@@ -1,14 +1,31 @@
 <div class="justify-content-center align-content-center">
-    <mat-card>
-        <mat-card-header class="justify-content-between">
-            <mat-card-title class="col-12 text-center">Inventory</mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-            <hr/>
-            <mat-list *ngFor="let book of books">
-                <mat-list-item [routerLink]="['/home/edit-book', book.id]"
-                               [title]='"Edit \"" + book.title +"\""'>Book "{{book.title}}"</mat-list-item>
-            </mat-list>
-        </mat-card-content>
-    </mat-card>
+  <mat-card>
+    <mat-card-header class="justify-content-between">
+      <mat-card-title class="col-12 text-center">Inventory</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <hr />
+      <mat-accordion>
+        <cdk-virtual-scroll-viewport itemSize="{{ books.length }}">
+          <mat-expansion-panel hideToggle *cdkVirtualFor="let book of books">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                {{ book.title }}
+              </mat-panel-title>
+              <mat-panel-description>
+                <button
+                  mat-button
+                  [routerLink]="['/home/edit-book', book.id]"
+                  routerLinkActive="active"
+                >
+                  Edit
+                </button>
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            Content
+          </mat-expansion-panel>
+        </cdk-virtual-scroll-viewport>
+      </mat-accordion>
+    </mat-card-content>
+  </mat-card>
 </div>
