@@ -118,6 +118,11 @@
                     <mat-header-row *matHeaderRowDef="columnsToDisplay"></mat-header-row>
                     <mat-row *matRowDef="let _; columns: columnsToDisplay"></mat-row>
                 </mat-table>
+                <mat-paginator
+                  [length]="dataSource.data.length"
+                  [pageSize]="5"
+                  [pageSizeOptions]="[5,10,15,20]">
+                </mat-paginator>
             </mat-card-content>
             <mat-card-actions>
                 <button
