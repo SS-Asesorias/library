@@ -5,27 +5,30 @@
     </mat-card-header>
     <mat-card-content>
       <hr />
-      <mat-accordion>
-        <cdk-virtual-scroll-viewport itemSize="{{ books.length }}">
-          <mat-expansion-panel hideToggle *cdkVirtualFor="let book of books">
-            <mat-expansion-panel-header>
-              <mat-panel-title>
-                {{ book.title }}
-              </mat-panel-title>
-              <mat-panel-description>
-                <button
-                  mat-button
-                  [routerLink]="['/home/edit-book', book.id]"
-                  routerLinkActive="active"
-                >
-                  Edit
-                </button>
-              </mat-panel-description>
-            </mat-expansion-panel-header>
-            Content
-          </mat-expansion-panel>
-        </cdk-virtual-scroll-viewport>
-      </mat-accordion>
+      <cdk-virtual-scroll-viewport itemSize="50" class="scrolling-container">
+        <mat-accordion class="example-headers-align">
+          <ng-container *cdkVirtualFor="let book of books">
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  <p class="book-title">{{ book.title }}</p>
+                </mat-panel-title>
+                <mat-panel-description>
+                  <div></div>
+                  <button
+                    mat-button
+                    [routerLink]="['/home/edit-book', book.id]"
+                    routerLinkActive="active"
+                  >
+                    Edit
+                  </button>
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+              Content
+            </mat-expansion-panel>
+          </ng-container>
+        </mat-accordion>
+      </cdk-virtual-scroll-viewport>
     </mat-card-content>
   </mat-card>
 </div>

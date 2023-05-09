@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 import { AddBookComponent } from './pages/add-book/add-book.component';
 import { HomeComponent } from './home.component';
@@ -57,6 +58,7 @@ import {
     MatExpansionModule,
     CdkFixedSizeVirtualScroll,
     CdkVirtualForOf,
+    ScrollingModule,
   ],
   providers: [MatSnackBar],
 })
