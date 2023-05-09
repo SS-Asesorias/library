@@ -1,32 +1,34 @@
-<div class="justify-content-center align-content-center">
-  <mat-card>
+<div class="justify-content-center align-content-center w-100 h-100">
+  <mat-card class="m-3 p-2 vh-100 h-100">
     <mat-card-header class="justify-content-between">
       <mat-card-title class="col-12 text-center">Inventory</mat-card-title>
     </mat-card-header>
-    <mat-card-content>
+    <mat-card-content class="h-100">
       <hr />
-      <cdk-virtual-scroll-viewport itemSize="50" class="scrolling-container">
-        <mat-accordion class="example-headers-align">
-          <ng-container *cdkVirtualFor="let book of books">
-            <mat-expansion-panel>
-              <mat-expansion-panel-header>
-                <mat-panel-title>
-                  <p class="book-title">{{ book.title }}</p>
-                </mat-panel-title>
-                <mat-panel-description>
-                  <div></div>
-                  <button
-                    mat-button
-                    [routerLink]="['/home/edit-book', book.id]"
-                    routerLinkActive="active"
-                  >
-                    Edit
-                  </button>
-                </mat-panel-description>
-              </mat-expansion-panel-header>
-              Content
-            </mat-expansion-panel>
-          </ng-container>
+      <cdk-virtual-scroll-viewport itemSize="50" class="d-flex w-100 h-100 mh-100">
+        <mat-accordion class="example-headers-align mh-100">
+          <mat-expansion-panel *cdkVirtualFor="let book of books" class="w-100">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <p class="book-title">{{ book.title }}</p>
+              </mat-panel-title>
+              <mat-panel-description>
+                <div></div>
+                <button
+                  mat-button
+                  [routerLink]="['/home/edit-book', book.id]"
+                  routerLinkActive="active"
+                >
+                  Edit
+                </button>
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <p>
+              Position: {{book.position}} <br>
+              Edition: {{book.edition}} <br>
+              Notes: {{book.notes}}
+            </p>
+          </mat-expansion-panel>
         </mat-accordion>
       </cdk-virtual-scroll-viewport>
     </mat-card-content>
