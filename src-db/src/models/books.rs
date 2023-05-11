@@ -4,7 +4,7 @@ use serde::{Deserialize, Serialize};
 use crate::models::authors::NewAuthor;
 use crate::schema::books;
 
-#[derive(Queryable)]
+#[derive(Queryable, Identifiable, AsChangeset, Serialize, Deserialize)]
 pub struct Book {
     pub id: i32,
     pub title: String,

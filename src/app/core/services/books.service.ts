@@ -20,4 +20,19 @@ export class BooksService {
 
     await invoke('register_book_command', { newBook: newBook });
   }
+
+  async getBooks(): Promise<Book[]> {
+    return await invoke<Book[]>('get_books_command');
+  }
+
+  async getBook(id: number): Promise<Book> {
+    return await invoke<Book>('get_book_command', { id: id });
+  }
+
+  async updateBook(book: Book, authors: Author[]): Promise<unknown> {
+    return await invoke('update_book_command', {
+      bookId: book.id,
+      modifiedBook: { ...book, authors },
+    });
+  }
 }
