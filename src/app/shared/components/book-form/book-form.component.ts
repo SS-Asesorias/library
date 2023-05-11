@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Input, OnInit, ViewChild } from "@angular/core";
 import { BooksService } from 'src/app/core/services/books.service';
 import { AuthorService } from '../../../core/services/author.service';
 import { Book } from '../../../core/models/Book';
@@ -6,6 +6,7 @@ import { Author } from '../../../core/models/Author';
 import { MatTableDataSource } from '@angular/material/table';
 import { SelectedAuthor } from '../../models/selectedAuthor';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatPaginator } from "@angular/material/paginator";
 import {
   AbstractControl,
   FormControl,
@@ -20,7 +21,7 @@ import {
   templateUrl: './book-form.component.html',
   styleUrls: ['./book-form.component.scss'],
 })
-export class BookFormComponent implements OnInit {
+export class BookFormComponent implements OnInit, AfterViewInit {
   @Input() bookId: number | undefined = undefined;
   @Input() pageName: string = '';
 
@@ -41,8 +42,10 @@ export class BookFormComponent implements OnInit {
     ),
   });
 
-  columnsToDisplay = ['name', 'lname', 'checked'];
-  dataSource:MatTableDataSource<SelectedAuthor> = new MatTableDataSource<SelectedAuthor>();
+  columnsToDisplay:string[] = ['name', 'lname', 'checked'];
+  dataSource : MatTableDataSource<SelectedAuthor> = new MatTableDataSource<SelectedAuthor>();
+
+  @ViewChild(MatPaginator) paginator: MatPaginator | null = null;
 
   constructor(
     private bookService: BooksService,
@@ -61,8 +64,7 @@ export class BookFormComponent implements OnInit {
     };
   }
 
-  async ngOnInit() {
-    await this.loadAuthors();
+   ngOnInit(){
     if (this.bookId !== undefined) {
       this.bookService.getBook(this.bookId).then(
         (result: Book) => {
@@ -80,6 +82,12 @@ export class BookFormComponent implements OnInit {
         }
       );
     }
+  }
+
+  async ngAfterViewInit() {
+    // make sure the entire view is already initialized
+    this.dataSource.paginator = this.paginator;
+    await this.loadAuthors();
   }
 
   async loadAuthors():Promise<void> {
@@ -154,7 +162,7 @@ export class BookFormComponent implements OnInit {
 
     this.bookService.updateBook(book, authors || []).then(
         ():void => {
-          this.loadAuthors();
+          this.loadAuthors().then();
           this.openSnackBar('Book saved successfully: ' + title);
         },
         (error) => {
